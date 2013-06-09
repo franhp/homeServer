@@ -1,0 +1,4 @@
+gunicorn
+django-bootstrap-toolkit
+transmissionrpc
+httplib2

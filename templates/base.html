@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+{% load bootstrap_toolkit %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Sauron homeServer</title>
+    <meta name="description" content="">
+    <meta name="author" content="Dylan Verheul">
+    {% bootstrap_stylesheet_tag %}
+    {% bootstrap_stylesheet_tag "responsive" %}
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+        }
+    </style>
+    <!--[if lt IE 9]>
+<script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    {% bootstrap_javascript_tag %}
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <a class="brand" href="/">homeServer</a>
+            <ul class="nav">
+                {% if perms.home.can_transmission %}
+                    <li><a href="{% url 'transmission' %}" class="">Transmission</a></li>
+                {% endif %}
+                {% if user.is_superuser %}
+                    <li><a href="/admin" class="">Admin</a></li>
+                {% endif %}
+            </ul>
+            {% if user.is_authenticated %}
+                <form class="navbar-form pull-right" action="{% url 'logout' %}" method="post" accept-charset="utf-8">
+                    <small>Logged as <strong>{{ user }}</strong>.&nbsp;</small>
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit"><i class="icon-off icon-white"></i> Logout</button>
+                </form>
+            {% else %}
+                <form class="navbar-form pull-right" action="{% url 'login' %}" method="post" accept-charset="utf-8">
+                    {% csrf_token %}
+                    <input class="span2" type="text" name="username" placeholder="Username" id="username" />
+                    <input class="span2" type="password" name="password" placeholder="Password" id="password" />
+                    <button class="btn btn-success" type="submit"><i class="icon-user icon-white"></i> Login</button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    {% block warnings %}
+        {% if denied %}
+            <div class="alert"> <button type="button" class="close" data-dismiss="alert">&times;</button>
+            <strong>Warning!</strong> You are not supposed to enter that section.</div>
+        {% endif %}
+    {% endblock %}
+    
+    {% bootstrap_messages %}
+
+    {% block content %}Empty page{% endblock %}
+
+    <p><hr></p>
+
+    <footer class="row">
+        <p>by <a href="http://franhp.net">Fran Hermoso</a></p>
+    </footer>
+
+
+</div> <!-- container -->
+
+{% block extra_javascript %}{% endblock %}
+
+</body>
+</html>
