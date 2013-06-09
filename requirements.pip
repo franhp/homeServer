@@ -1,4 +1,5 @@
 gunicorn
 django-bootstrap-toolkit
+django-mathfilters
 transmissionrpc
 httplib2

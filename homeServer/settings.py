@@ -1,6 +1,9 @@
 import os
 # Django settings for homeServer project.
 
+TRANSMISSION_HOST = 'sauron'
+TRANSMISSION_PORT = 9090
+
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 DEBUG = True
@@ -130,6 +133,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
     'gunicorn',
     'bootstrap_toolkit',
+    'mathfilters',
     'homeServer',
     'transmission'
 )

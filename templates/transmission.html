@@ -1,7 +1,53 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% load mathfilters %}
 
-{{ torrents }}
+    <h1>Downloads</h1>
+    {% if torrents %}
+        <table class="table table-stripped">
+            <thead><tr><th style="width:40%">Status</th><th>Name</th><th>Remove</th></tr></thead>
+            <tbody>
+            {% for torrent in torrents %}
+                {% if torrent.isFinished == True %}
+                    <tr class="success">
+                {% else %}
+                    <tr class="error">
+                {% endif %}
+                    <td>    
+                        <div class="progress progress-striped active">
+                        <div class="bar" style="width: {{ torrent.percentDone|mul:"100" }}%;">{{ torrent.percentDone|mul:"100" }}%</div>
+                        </div>
+                    </td>
+                    <td>
+                        <strong>{{ torrent.name }}</strong>
+                    </td>
+                    <td>
+                        <form class="form-inline" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="del" value="{{torrent.hashString}}">
+                            <input type="submit" class="btn btn-danger" value="Remove">
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else  %}
+        <p>No torrents in the list </p>
+    {% endif %}
+
+    <h1> Add </h1>
+    <form class="form-inline" method="post">
+        {% csrf_token %}
+        <input type="text" name="add" placeholder="URL" style="width:50%">
+        <button type="submit" class="btn">Upload</button>
+    </form>
+
+    {% if upload %}
+
+    {% endif %}
+
+
 
 {% endblock %}

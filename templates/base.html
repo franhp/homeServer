@@ -28,7 +28,7 @@
         <div class="container">
             <a class="brand" href="/">homeServer</a>
             <ul class="nav">
-                {% if perms.home.can_transmission %}
+                {% if perms.transmission.can_transmission %}
                     <li><a href="{% url 'transmission' %}" class="">Transmission</a></li>
                 {% endif %}
                 {% if user.is_superuser %}
