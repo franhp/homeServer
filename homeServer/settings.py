@@ -142,8 +142,6 @@ INSTALLED_APPS = (
     'homeServer',
     'transmission',
     'pyload',
-    'grappelli',
-    'filebrowser',
 )
 
 # A sample logging configuration. The only tangible logging
