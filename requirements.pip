@@ -1,6 +1,5 @@
 gunicorn
 django-bootstrap-toolkit
 django-mathfilters
-django-filebrowser
 transmissionrpc
 requests
