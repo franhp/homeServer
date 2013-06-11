@@ -4,6 +4,11 @@ import os
 TRANSMISSION_HOST = 'sauron'
 TRANSMISSION_PORT = 9090
 
+PYLOAD_USERNAME = 'username'
+PYLOAD_PASSWORD = 'password'
+PYLOAD_HOSTNAME = 'sauron'
+PYLOAD_PORT = 9091
+
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 DEBUG = True
@@ -135,7 +140,10 @@ INSTALLED_APPS = (
     'bootstrap_toolkit',
     'mathfilters',
     'homeServer',
-    'transmission'
+    'transmission',
+    'pyload',
+    'grappelli',
+    'filebrowser',
 )
 
 # A sample logging configuration. The only tangible logging

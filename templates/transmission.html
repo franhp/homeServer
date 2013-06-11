@@ -2,7 +2,7 @@
 
 {% block content %}
 {% load mathfilters %}
-
+<div class="span7">
     <h1>Downloads</h1>
     {% if torrents %}
         <table class="table table-stripped">
@@ -36,18 +36,13 @@
     {% else  %}
         <p>No torrents in the list </p>
     {% endif %}
-
-    <h1> Add </h1>
+</div>
+<div class="span4">
+    <h1> Add </h1><br><br>
     <form class="form-inline" method="post">
         {% csrf_token %}
         <input type="text" name="add" placeholder="URL" style="width:50%">
-        <button type="submit" class="btn">Upload</button>
+        <button type="submit" class="btn">Request Download</button>
     </form>
-
-    {% if upload %}
-
-    {% endif %}
-
-
-
+</div>
 {% endblock %}

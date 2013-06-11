@@ -31,6 +31,9 @@
                 {% if perms.transmission.can_transmission %}
                     <li><a href="{% url 'transmission' %}" class="">Transmission</a></li>
                 {% endif %}
+                {% if perms.pyload.can_pyload %}
+                    <li><a href="{% url 'pyload' %}" class="">pyLoad</a></li>
+                {% endif %}
                 {% if user.is_superuser %}
                     <li><a href="/admin" class="">Admin</a></li>
                 {% endif %}
@@ -65,11 +68,12 @@
 
     {% block content %}Empty page{% endblock %}
 
-    <p><hr></p>
-
-    <footer class="row">
-        <p>by <a href="http://franhp.net">Fran Hermoso</a></p>
-    </footer>
+    <div class="span12">
+        <p><hr></p>
+        <footer class="row">
+            <p>by <a href="http://franhp.net">Fran Hermoso</a></p>
+        </footer>
+    <div>
 
 
 </div> <!-- container -->
