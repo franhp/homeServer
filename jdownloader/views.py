@@ -15,9 +15,11 @@ def list(request):
         download = t.addLink(request.POST['add'])
 
     queue = []
-    for package in t.getQueue()['jdownloader']['package']:
-        queue.append((package['@package_linksinprogress'], package['file']['@file_name'], package['file']['@file_percent']))
-
-
+    packages = t.getQueue()
+    try:
+        for package in packages['jdownloader']['package']:
+            queue.append((package['@package_linksinprogress'], package['file']['@file_name'], package['file']['@file_percent']))
+    except TypeError:
+        pass
 
     return render_to_response('jdownloader.html', RequestContext(request, {'queue': queue, 'download': download}))
