@@ -1,13 +1,10 @@
 import os
 # Django settings for homeServer project.
+try:
+    from local_settings import *
+except ImportError:
+    raise Exceptions("Local_settings.py was not found")
 
-TRANSMISSION_HOST = 'sauron'
-TRANSMISSION_PORT = 9090
-
-PYLOAD_USERNAME = 'username'
-PYLOAD_PASSWORD = 'password'
-PYLOAD_HOSTNAME = 'sauron'
-PYLOAD_PORT = 9091
 
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
 
@@ -93,8 +90,7 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = 'v7qj_^mq&%5yqw6$-t_f*ktxz^37ji7mu$cadhsh_pzgy+)(^p'
+
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
