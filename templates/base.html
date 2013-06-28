@@ -31,6 +31,9 @@
                 {% if perms.transmission.can_transmission %}
                     <li><a href="{% url 'transmission' %}" class="">Transmission</a></li>
                 {% endif %}
+                {% if perms.jdownloader.can_jdownloader %}
+                    <li><a href="{% url 'jdownloader' %}" class="">jDownloader</a></li>
+                {% endif %}
                 {% if perms.pyload.can_pyload %}
                     <li><a href="{% url 'pyload' %}" class="">pyLoad</a></li>
                 {% endif %}

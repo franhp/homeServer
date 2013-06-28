@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<hr>
+{{ download }}
+<hr>
+<div class="span8">
+    <h1>Queue</h1>
+    {% if queue %}
+        <table class="table table-stripped">
+            <thead><tr><th>Name</th><th>Status</th></tr></thead>
+            <tbody>
+            {% for active, name, percent  in queue %}
+                {% if active == '0' %}
+                    <tr class="success">
+                {% else %}
+                    <tr class="error">
+                {% endif %}
+                    <td>
+                        <strong>{{ name }}</strong>
+                    </td>
+                    <td>
+                        <div class="progress progress-striped active">
+                            <div class="bar" style="width: {{ percent }}%;">{{ percent }}%</div>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else  %}
+        <p>No files in the queue </p>
+    {% endif %}
+</div>
+<div class="span3">
+    <h1>Downloads</h1>
+    <form class="form-inline" method="post">
+        {% csrf_token %}
+        <input type="text" name="add" placeholder="URL" style="width:50%"><br><br>
+        <button type="submit" class="btn">Request Download</button>
+    </form>
+</div>
+
+{% endblock %}
