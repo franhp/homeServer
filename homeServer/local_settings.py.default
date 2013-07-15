@@ -9,5 +9,9 @@ PYLOAD_PORT = 9091
 JDOWNLOADER_HOSTNAME = 'localhost'
 JDOWNLOADER_PORT = '10025'
 
+LIBRARY_PATH = ''
+THUMBNAILS_PATH = ''
+DOWNLOADS_PATH = ''
+
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'xxxxx'

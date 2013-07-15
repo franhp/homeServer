@@ -37,6 +37,9 @@
                 {% if perms.pyload.can_pyload %}
                     <li><a href="{% url 'pyload' %}" class="">pyLoad</a></li>
                 {% endif %}
+                {% if perms.rpd.can_rpd %}
+                    <li><a href="{% url 'rpd' %}" class="">RPD</a></li>
+                {% endif %}
                 {% if user.is_superuser %}
                     <li><a href="/admin" class="">Admin</a></li>
                 {% endif %}
@@ -59,7 +62,7 @@
     </div>
 </div>
 
-<div class="container">
+<div class="container-fluid">
     {% block warnings %}
         {% if denied %}
             <div class="alert"> <button type="button" class="close" data-dismiss="alert">&times;</button>
