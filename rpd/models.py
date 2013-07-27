@@ -18,7 +18,7 @@ class RPD(models.Model):
 
     def listVideos(self):
         videosPaths = []
-        for root, dirs, files in os.walk(self.videoPath):
+        for root, dirs, files in os.walk(self.downloadsPath):
             for name in files:
                 videosPaths.append(os.path.join(root, name))
         return videosPaths
@@ -26,7 +26,7 @@ class RPD(models.Model):
     def findMostCommonWords(self):
         # Find filenames
         names = []
-        for root, dirs, files in os.walk(self.downloadsPath):
+        for root, dirs, files in os.walk(self.videoPath):
             for name in files:
                 names.append(name)
         # Find most common words in filenames

@@ -12,7 +12,7 @@ import os
 def index(request):
     move = delete = ''
     if 'video' in request.POST:
-        shutil.move(request.POST['video'], os.path.join('/Users/franhp/code/homeServer', request.POST['short']))
+        shutil.move(request.POST['video'], os.path.join(settings.DOWNLOADS_PATH, request.POST['short']))
         move = request.POST['short']
     if 'delete' in request.POST:
         os.remove(request.POST['delete'])
