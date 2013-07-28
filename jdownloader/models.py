@@ -16,3 +16,6 @@ class jdownloaderClient(models.Model):
     def addLink(self, url):
         url = 'http://'+url if not url.startswith('http://') else url
         return requests.get(self.base_url+'/action/add/links/grabber0/start1/'+url).text
+
+    def startDL(self):
+        return requests.get(self.base_url+'/action/start').text

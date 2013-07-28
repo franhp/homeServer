@@ -39,6 +39,12 @@
         <input type="text" name="add" placeholder="URL" style="width:50%"><br><br>
         <button type="submit" class="btn">Request Download</button>
     </form>
+    <h1>Start</h1>
+    <form class="form-inline" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="start" value="start">
+        <button type="submit" class="btn">Start Downloads</button>
+    </form>
 </div>
 
 {% endblock %}

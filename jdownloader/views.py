@@ -13,6 +13,8 @@ def list(request):
     download = ''
     if 'add' in request.POST:
         download = t.addLink(request.POST['add'])
+    elif 'start' in request.POST:
+        download = t.startDL()
 
     queue = []
     packages = t.getQueue()
