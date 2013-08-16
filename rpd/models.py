@@ -47,25 +47,28 @@ class RPD(models.Model):
                     thumbnails.append(f)
         i = 0
         for video in library:
-            # Assign rating by popularity
-            rating = 0
-            for word in re.findall(r'\w+', video):
-                for count in counter:
-                    if word.upper() == count[0]:
-                        rating += count[1]
-            # Find thumbnails
-            relevantThumbnails = []
-            for thumbnail in thumbnails:
-                if os.path.basename(video)[:-4] in thumbnail:
-                    relevantThumbnails.append(thumbnail)
-            # Or create the thumbnails if the video didn't have any
-            if len(relevantThumbnails) is 0:
-                try:
-                    self.createThumbnails(video)
-                except Exception, err:
-                    print '[%s] is not a video: [%s]' % (video, err)
-            i += 1
-            videos.append((rating, os.path.basename(video), video, relevantThumbnails, i))
+            if 'DS_Store' in video:
+                os.remove(video)
+            else:
+                # Assign rating by popularity
+                rating = 0
+                for word in re.findall(r'\w+', video):
+                    for count in counter:
+                        if word.upper() == count[0]:
+                            rating += count[1]
+                # Find thumbnails
+                relevantThumbnails = []
+                for thumbnail in thumbnails:
+                    if os.path.basename(video)[:-4] in thumbnail:
+                        relevantThumbnails.append(thumbnail)
+                # Or create the thumbnails if the video didn't have any
+                if len(relevantThumbnails) is 0:
+                    try:
+                        self.createThumbnails(video)
+                    except Exception, err:
+                        print '[%s] is not a video: [%s]' % (video, err)
+                i += 1
+                videos.append((rating, os.path.basename(video), video, relevantThumbnails, i))
 
         # Reverse sort the list
         return reversed(sorted(videos))
@@ -93,6 +96,9 @@ class RPD(models.Model):
                         elif char not in UGLYCHARS:
                             newName.append(char)
                     shutil.move(os.path.join(root, f), os.path.join(root, ''.join(newName)))
+
+                if 'DS_Store' in f:
+                    os.remove(f)
 
 
 
