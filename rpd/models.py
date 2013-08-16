@@ -98,7 +98,7 @@ class RPD(models.Model):
                     shutil.move(os.path.join(root, f), os.path.join(root, ''.join(newName)))
 
                 if 'DS_Store' in f:
-                    os.remove(f)
+                    os.remove(os.path.join(root,f))
 
 
 
