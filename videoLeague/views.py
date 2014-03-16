@@ -21,5 +21,6 @@ def index(request):
     return render_to_response('league.html', RequestContext(request, {'video1': contestants[0],
                                                                       'video2': contestants[1],
                                                                       'ranking': ranking[0:10],
-                                                                      'deleted': ranking[-5:]
+                                                                      'deleted': ranking[-5:],
+                                                                      'size': len(ranking)
     }))
