@@ -18,7 +18,7 @@
           controls preload="auto" width="640" height="264"
           poster="{{ video1.poster }}"
           data-setup='{"controls": true, "autoplay": false, "preload": "auto"}'>
-         <source src="{{ STATIC_URL }}{{ video1.video_rel_path }}" type='video/{{ video1.name|slice:"-3:"}}' />
+         <source src="{{ STATIC_URL }}videos/{{ video1.video_rel_path }}" type='video/{{ video1.name|slice:"-3:"}}' />
         </video>
         <form method="POST">
             {% csrf_token %}
@@ -33,7 +33,7 @@
           controls preload="auto" width="640" height="264"
           poster="{{ video2.poster }}"
           data-setup='{"controls": true, "autoplay": false, "preload": "auto"}'>
-         <source src="{{ STATIC_URL }}{{ video2.video_rel_path }}" type='video/{{ video1.name|slice:"-3:"}}' />
+         <source src="{{ STATIC_URL }}videos/{{ video2.video_rel_path }}" type='video/{{ video1.name|slice:"-3:"}}' />
         </video>
         <form method="POST">
             {% csrf_token %}
