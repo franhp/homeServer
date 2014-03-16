@@ -57,7 +57,7 @@ class videoLeague(models.Model):
         voted_down.save()
 
         # If the loser is is very bad, delete it
-        if voted_down.votes < -10:
+        if voted_down.votes < -4:
             os.remove(voted_down.video_full_path)
             voted_down.isdeleted = 1
             voted_down.save()
