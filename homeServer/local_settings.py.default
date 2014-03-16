@@ -13,5 +13,7 @@ LIBRARY_PATH = ''
 THUMBNAILS_PATH = ''
 DOWNLOADS_PATH = ''
 
+LEAGUE_PATH=''
+
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'xxxxx'

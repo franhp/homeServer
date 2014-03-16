@@ -81,6 +81,7 @@ STATICFILES_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(SITE_ROOT, '../thumbnails'),
+    os.path.join(SITE_ROOT, '../videos'),
 )
 
 # List of finder classes that know how to find static files in
@@ -140,6 +141,7 @@ INSTALLED_APPS = (
     'transmission',
     'pyload',
     'rpd',
+    'videoLeague'
 )
 
 # A sample logging configuration. The only tangible logging

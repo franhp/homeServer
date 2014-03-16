@@ -40,6 +40,9 @@
                 {% if perms.rpd.can_rpd %}
                     <li><a href="{% url 'rpd' %}" class="">RPD</a></li>
                 {% endif %}
+                {% if perms.videoLeague.can_league %}
+                    <li><a href="{% url 'league' %}" class="">VideoLeague</a></li>
+                {% endif %}
                 {% if user.is_superuser %}
                     <li><a href="/admin" class="">Admin</a></li>
                 {% endif %}
