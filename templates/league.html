@@ -14,33 +14,35 @@
 <div class="row-fluid" >
     <div class="span6">
         {{ video1.name }}
-        <video id="contestant1" class="video-js vjs-default-skin"
-          controls preload="auto" width="640" height="264"
-          poster="{{ video1.poster }}"
-          data-setup='{"controls": true, "autoplay": false, "preload": "auto"}'>
-         <source src="{{ STATIC_URL }}videos/{{ video1.video_rel_path }}" type='video/{{ video1.name|slice:"-3:"}}' />
-        </video>
         <form method="POST">
             {% csrf_token %}
             <input type="hidden" name="voteup" value="{{ video1.name }}">
             <input type="hidden" name="votedown" value="{{ video2.name }}">
             <input type="submit" class="btn" value="+1">
         </form>
+        <video id="contestant1" class="video-js vjs-default-skin"
+          controls preload="auto" width="640" height="264"
+          poster="{{ video1.poster }}"
+          data-setup='{"controls": true, "autoplay": false, "preload": "auto"}'>
+         <source src="{{ STATIC_URL }}videos/{{ video1.video_rel_path }}" type='video/{{ video1.name|slice:"-3:"}}' />
+        </video>
+
 
 
         {{ video2.name }}
-        <video id="contestant2" class="video-js vjs-default-skin"
-          controls preload="auto" width="640" height="264"
-          poster="{{ video2.poster }}"
-          data-setup='{"controls": true, "autoplay": false, "preload": "auto"}'>
-         <source src="{{ STATIC_URL }}videos/{{ video2.video_rel_path }}" type='video/{{ video2.name|slice:"-3:"}}' />
-        </video>
         <form method="POST">
             {% csrf_token %}
             <input type="hidden" name="voteup" value="{{ video2.name }}">
             <input type="hidden" name="votedown" value="{{ video1.name }}">
             <input type="submit" class="btn" value="+1">
         </form>
+        <video id="contestant2" class="video-js vjs-default-skin"
+          controls preload="auto" width="640" height="264"
+          poster="{{ video2.poster }}"
+          data-setup='{"controls": true, "autoplay": false, "preload": "auto"}'>
+         <source src="{{ STATIC_URL }}videos/{{ video2.video_rel_path }}" type='video/{{ video2.name|slice:"-3:"}}' />
+        </video>
+
     </div>
     <div class="span6">
         <h1>Top</h1>
