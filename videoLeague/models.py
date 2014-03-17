@@ -27,13 +27,14 @@ class videoLeague(models.Model):
                     print('Video with name [%s] already exists' % name)
                 else:
                     print('Creating video with name [%s] ... '%name)
-                    v = Video(name=name,
-                              video_full_path=os.path.join(root, name),
-                              video_rel_path=os.path.join(os.path.relpath(root, path), name),
-                              poster=name[:-3] + '50.jpg',
-                              isdeleted=0,
-                              votes=0)
-                    v.save()
+                    if 'fuse' not in name:
+                        v = Video(name=name,
+                                  video_full_path=os.path.join(root, name),
+                                  video_rel_path=os.path.join(os.path.relpath(root, path), name),
+                                  poster=name[:-3] + '50.jpg',
+                                  isdeleted=0,
+                                  votes=0)
+                        v.save()
 
 
 
