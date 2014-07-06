@@ -82,6 +82,7 @@ STATICFILES_DIRS = (
     # Don't forget to use absolute paths, not relative paths.
     ('thumbnails', os.path.join(SITE_ROOT, '../thumbnails')),
     ('videos', os.path.join(SITE_ROOT, '../videos')),
+    ('random', os.path.join(SITE_ROOT, '../random')),
 )
 
 # List of finder classes that know how to find static files in
