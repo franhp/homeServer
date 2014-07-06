@@ -7,7 +7,6 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url(r'^$', 'home.views.index', name='index'),
     url(r'^transmission/', 'transmission.views.list', name='transmission'),
-    url(r'^pyload/', 'pyload.views.list', name='pyload'),
     url(r'^jdownloader/', 'jdownloader.views.list', name='jdownloader'),
     url(r'^rpd/', 'rpd.views.index', name='rpd'),
     url(r'^league/', 'videoLeague.views.index', name='league'),

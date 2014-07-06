@@ -139,7 +139,6 @@ INSTALLED_APPS = (
     'mathfilters',
     'homeServer',
     'transmission',
-    'pyload',
     'rpd',
     'videoLeague'
 )

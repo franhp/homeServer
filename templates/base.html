@@ -34,9 +34,6 @@
                 {% if perms.jdownloader.can_jdownloader %}
                     <li><a href="{% url 'jdownloader' %}" class="">jDownloader</a></li>
                 {% endif %}
-                {% if perms.pyload.can_pyload %}
-                    <li><a href="{% url 'pyload' %}" class="">pyLoad</a></li>
-                {% endif %}
                 {% if perms.rpd.can_rpd %}
                     <li><a href="{% url 'rpd' %}" class="">RPD</a></li>
                 {% endif %}
