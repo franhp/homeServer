@@ -31,7 +31,7 @@ class videoLeague(models.Model):
                         v = Video(name=name,
                                   video_full_path=os.path.join(root, name),
                                   video_rel_path=os.path.join(os.path.relpath(root, path), name),
-                                  poster=name[:-3] + '50.jpg',
+                                  poster=name[:-4] + '.jpg',
                                   isdeleted=0,
                                   votes=0)
                         v.save()
