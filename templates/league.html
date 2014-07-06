@@ -22,7 +22,7 @@
         </form>
         <video id="contestant1" class="video-js vjs-default-skin"
           controls preload="auto" width="640" height="264"
-          poster="{{ video1.poster }}"
+          poster="{{STATIC_URL}}thumbnails/{{ video1.poster }}"
           data-setup='{"controls": true, "autoplay": false, "preload": "auto"}'>
          <source src="{{ STATIC_URL }}videos/{{ video1.video_rel_path }}" type='video/{{ video1.name|slice:"-3:"}}' />
         </video>
@@ -38,7 +38,7 @@
         </form>
         <video id="contestant2" class="video-js vjs-default-skin"
           controls preload="auto" width="640" height="264"
-          poster="{{ video2.poster }}"
+          poster="{{STATIC_URL}}thumbnails/{{ video2.poster }}"
           data-setup='{"controls": true, "autoplay": false, "preload": "auto"}'>
          <source src="{{ STATIC_URL }}videos/{{ video2.video_rel_path }}" type='video/{{ video2.name|slice:"-3:"}}' />
         </video>

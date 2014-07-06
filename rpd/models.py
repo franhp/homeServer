@@ -40,7 +40,12 @@ class RPD(models.Model):
     def sortVideosByPopularity(self, library, counter):
         videos = []
         thumbnails = []
-        
+
+        # clean the library of part downloaded
+        for video in library:
+            if 'part' in video:
+                library.remove(video)
+
         #List thumbnails
         for root, dirs, files in os.walk(self.thumbnailsPath):
                 for f in files:
@@ -64,7 +69,7 @@ class RPD(models.Model):
                 # Or create the thumbnails if the video didn't have any
                 if len(relevantThumbnails) is 0:
                     try:
-                        self.createThumbnails(video)
+                        self.createThumbnail(video)
                     except Exception, err:
                         print '[%s] is not a video: [%s]' % (video, err)
                 i += 1
@@ -73,10 +78,9 @@ class RPD(models.Model):
         # Reverse sort the list
         return reversed(sorted(videos))
 
-    def createThumbnails(self, video):
-        for i in (5, 50, 250, 500):
-            filename = os.path.join(self.thumbnailsPath, os.path.basename(video)[:-4] + '.' + str(i) + '.jpg')
-            check_output('ffmpeg  -itsoffset -' + str(i) + '  -i ' + video + ' -vcodec mjpeg -vframes 1 -an -f rawvideo -s 320x240 '+filename, shell=True)
+    def createThumbnail(self, video):
+        filename = os.path.join(self.thumbnailsPath, os.path.basename(video)[:-4] + '.jpg')
+        check_output('ffmpeg -itsoffset -00:00:05 -i ' + video + ' -vcodec mjpeg -vframes 1 -an -f rawvideo -s 320x240 '+filename, shell=True)
 
     def fixFilenames(self):
         UGLYCHARS = ''.join(set(string.punctuation) - set('-_+.~%'))
