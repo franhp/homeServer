@@ -1,4 +1,4 @@
-*.pyc
+*.py[co]
 database.sqlite3
 local_settings.py
 thumbnails/

@@ -1,0 +1,6 @@
+Django==1.7
+django-bootstrap-toolkit==2.15.0
+django-configurations==0.8
+gunicorn==19.3.0
+requests==2.7.0
+transmissionrpc==0.11
