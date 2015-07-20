@@ -1,18 +1,27 @@
-from django.shortcuts import render_to_response
-from django.template.context import RequestContext
-from django.contrib.auth.decorators import login_required, user_passes_test
-from transmission.models import transmissionClient
+from django.core.urlresolvers import reverse
+from django.http.response import HttpResponseRedirect
+
+from django.shortcuts import render
+from django.views.generic.base import View
+
+from models import TransmissionClient
 
 
-@login_required
-@user_passes_test(lambda u: u.has_perm('transmission.can_transmission'), login_url='/denied')
-def list(request):
-    t = transmissionClient()
+class TransmissionView(View):
+    template_name = 'transmission.html'
 
-    if 'add' in request.POST:
-        t.addTorrent(request.POST['add'])
+    def get(self, request, *args, **kwargs):
+        return render(
+            request, self.template_name, {
+                'torrents': TransmissionClient.get_torrents()}
+        )
 
-    if 'del' in request.POST:
-        t.delTorrent(request.POST['del'])
-
-    return render_to_response('transmission.html', RequestContext(request, {'torrents': t.getTorrents()}))
+    def post(self, request, *args, **kwargs):
+        is_delete = request.POST.get('del')
+        is_add = request.POST.get('add')
+        if is_delete:
+            TransmissionClient.del_torrent(is_delete)
+        elif is_add:
+            TransmissionClient.add_torrent(is_add)
+        
+        return HttpResponseRedirect(reverse('transmission'))

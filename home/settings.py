@@ -21,6 +21,8 @@ class Base(Configuration):
         'django.contrib.sessions',
         'django.contrib.messages',
         'django.contrib.staticfiles',
+        'home',
+        'transmission',
     )
 
     MIDDLEWARE_CLASSES = (
@@ -31,7 +33,6 @@ class Base(Configuration):
         'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
         'django.contrib.messages.middleware.MessageMiddleware',
         'django.middleware.clickjacking.XFrameOptionsMiddleware',
-        'django.middleware.security.SecurityMiddleware',
     )
 
     ROOT_URLCONF = 'home.urls'
@@ -89,6 +90,9 @@ class Base(Configuration):
 class Dev(Base):
     DEBUG = True
     TEMPLATE_DEBUG = DEBUG
+
+    TRANSMISSION_HOST = 'localhost'
+    TRANSMISSION_PORT = 9091
 
 
 class Prod(Base):
