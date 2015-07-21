@@ -23,6 +23,7 @@ class Base(Configuration):
         'django.contrib.staticfiles',
         'home',
         'transmission',
+        'random_video_downloader',
     )
 
     MIDDLEWARE_CLASSES = (
@@ -94,6 +95,13 @@ class Dev(Base):
     TRANSMISSION_HOST = 'localhost'
     TRANSMISSION_PORT = 9091
 
+    DEFAULT_OUTPUT_DIR = os.path.join('~', 'Downloads')
+
 
 class Prod(Base):
     DEBUG = False
+
+    TRANSMISSION_HOST = os.environ.get('TRANSMISSION_HOST', 'localhost')
+    TRANSMISSION_PORT = os.environ.get('TRANSMISSION_PORT', 9091)
+    DEFAULT_OUTPUT_DIR = os.environ.get(
+        'DEFAULT_OUTPUT_DIR', os.path.join('/tmp/', 'Downloads'))

@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="col-sm-12 col-md-8">
+        <h1>List latest downloads</h1>
+        <table class="table table-striped">
+            <thead style="font-weight: bold;">
+                <td>Provider</td><td>Title</td><td>Last Update</td><td>Status</td>
+            </thead>
+            {% for download in downloads %}
+                <tr>
+                    <td>{{ download.provider }}</td>
+                    <td>{{ download.title }}</td>
+                    <td>{{ download.updated_on }}</td>
+                    <td>{{ download.get_status_display }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+
+    <div class="col-sm-12 col-md-4">
+        <h1>Queue download</h1>
+        <form method="POST" action="{% url 'downloader' %}" class="form-horizontal">
+        {% csrf_token %}
+            <div class="form-group">
+                <label for="add_title" class="col-sm-2">Title:</label>
+                <div class="col-sm-10">
+                    <input type="text" name="add_title" id='add_title' class="form-control" placeholder="My Video">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="add_url" class="col-sm-2">URL:</label>
+                <div class="col-sm-10">
+                    <input type="text" name="add_url" id='add_url' class="form-control" placeholder="http://...">
+                </div>
+            </div>
+        <button type="submit" class="btn btn-default pull-right">Queue</button>
+        </form>
+    </div>
+
+    <div class="col-sm-12 col-md-4">
+        <h1>Download Providers</h1>
+        <table class="table table-striped">
+            <thead style="font-weight: bold;">
+                <td>Job Name</td><td>Last Execution</td><td>Scheduled?</td>
+            </thead>
+            {% for job in jobs %}
+                <tr>
+                    <td>{{ job.name }}</td>
+                    <td><small>{{ job.last_execution|date:"d b" }}</small></td>
+                    <td>{{ job.scheduled }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+
+{% endblock %}

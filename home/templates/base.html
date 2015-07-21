@@ -25,6 +25,9 @@
             {% if user.is_authenticated %}
                 <li><a href="{% url 'transmission' %}" class="">transmission</a></li>
             {% endif %}
+            {% if user.is_authenticated %}
+                <li><a href="{% url 'downloader' %}" class="">video_downloader</a></li>
+            {% endif %}
             {% if user.is_superuser %}
                 <li><a href="/admin" class="">admin</a></li>
             {% endif %}
