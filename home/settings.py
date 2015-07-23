@@ -24,6 +24,7 @@ class Base(Configuration):
         'home',
         'transmission',
         'random_video_downloader',
+        'games',
     )
 
     MIDDLEWARE_CLASSES = (
@@ -92,16 +93,21 @@ class Dev(Base):
     DEBUG = True
     TEMPLATE_DEBUG = DEBUG
 
+    # Transmission
     TRANSMISSION_HOST = 'localhost'
     TRANSMISSION_PORT = 9091
 
+    # Video Downloader
     DEFAULT_OUTPUT_DIR = os.path.join('~', 'Downloads')
 
 
 class Prod(Base):
     DEBUG = False
 
+    # Transmission
     TRANSMISSION_HOST = os.environ.get('TRANSMISSION_HOST', 'localhost')
     TRANSMISSION_PORT = os.environ.get('TRANSMISSION_PORT', 9091)
+
+    # Video Downloader
     DEFAULT_OUTPUT_DIR = os.environ.get(
         'DEFAULT_OUTPUT_DIR', os.path.join('/tmp/', 'Downloads'))

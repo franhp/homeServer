@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    {% if not ranking %}
+    Must create league called `VideoLeague`
+
+    {% endif %}
+
+    <h1>Ranking</h1>
+
+    <h2>Top</h2>
+    {% for r in ranking|slice:":10" %}
+        {{ r.name }} - {{ r.votes }}<br>
+    {% endfor %}
+
+    <h2>Bottom</h2>
+    {% for r in ranking|slice:"-5:" %}
+        {{ r.name }} - {{ r.votes }}<br>
+    {% endfor %}
+
+
+    <h1>Contestants</h1>
+
+
+    {{ contestant1.name }}<br>
+
+
+    vs<br>
+
+
+    {{ contestant2.name }}
+
+{% endblock %}

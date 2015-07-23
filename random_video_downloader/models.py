@@ -27,7 +27,7 @@ class VideoDownloader(models.Model):
     def find_urls(self):
         urls = []
         html = PyQuery(url=self.website)
-        elements = html(self.element_query)
+        elements = html(self.element_query)  # TODO doesn't work on all sites
         for element in elements:
             title = eval(self.title_query)
             url = eval(self.url_query)

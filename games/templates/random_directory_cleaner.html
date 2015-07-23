@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Ranking</h1>
+
+    {% if not ranking %}
+    Must Create League with name `RandomDirectory`
+    {% endif %}
+
+    {% for word in ranking %}
+        {{ word.0 }} -  {{ word.1 }} <br>
+    {% endfor %}
+
+
+    <h1>Videos</h1>
+    {% for video in videos %}
+        {{ video.video_rel_path }} - {{ video.popularity }} - {{ video.name }} <br>
+    {% endfor %}
+{% endblock %}
