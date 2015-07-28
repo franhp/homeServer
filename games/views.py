@@ -10,6 +10,7 @@ class RandomDirectoryCleanerView(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
             league = League.objects.get(name='RandomDirectory')
+            league.cleanup()
         except ObjectDoesNotExist:
             return render(request, self.template_name, {})
 
@@ -25,6 +26,7 @@ class LeagueView(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
             league = League.objects.get(name='VideoLeague')
+            league.cleanup()
             contestants = league.gather_random_contestants(league.library_path)
         except ObjectDoesNotExist:
             return render(request, self.template_name, {})
@@ -33,3 +35,9 @@ class LeagueView(TemplateView):
             'contestant1': contestants[0],
             'contestant2': contestants[1]
         })
+
+
+class FilterGameView(TemplateView):
+    pass
+    # TODO IDEA: Tag all the videos, how much time you got?
+    # go random playlist!

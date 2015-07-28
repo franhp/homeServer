@@ -5,7 +5,6 @@ import random
 import re
 
 from django.db import models
-from django.conf import settings
 
 
 class League(models.Model):
@@ -33,29 +32,11 @@ class League(models.Model):
 
     def words_ranking(self):
         return reversed(sorted(
-            self.common_words().most_common(10), key=lambda x : x[1]))
+            self.common_words().most_common(10), key=lambda x: x[1]))
 
     def list_videos(self, videos_path, key=None):
-        # Let's keep things clean
-        self.cleanup()
-
-        def is_commonly_not_used(filename):
-            is_directory = os.path.isdir(video_path)
-            sysfile = filename in ('.DS_Store', )
-            return is_directory or sysfile
-
-        all_videos = []
-        for root, dirs, files in os.walk(videos_path):
-            for name in files:
-                video_path = os.path.join(root, name)
-                rel_path = os.path.join(
-                    os.path.relpath(root, self.library_path), name)
-                if not is_commonly_not_used(name):
-                    v, _ = LeagueVideo.objects.get_or_create(
-                        video_full_path=video_path,
-                        video_rel_path=rel_path,
-                        league=self)
-                    all_videos.append(v)
+        all_videos = list(self.league.filter(
+            video_full_path__startswith=videos_path))
 
         if key:
             return sorted(all_videos, key=key)
@@ -72,9 +53,31 @@ class League(models.Model):
         return random.sample(self.list_videos(videos_path), 2)
 
     def cleanup(self):
-        for video in LeagueVideo.objects.filter(league=self):
+        for video in self.league.all():
             if not os.path.exists(video.video_full_path):
                 video.delete()
+
+        def is_commonly_not_used(filename):
+            is_directory = os.path.isdir(filename)
+            sysfile = filename in ('.DS_Store',)
+            return is_directory or sysfile
+
+        def update_video_objects(video_location):
+
+            for root, dirs, files in os.walk(video_location):
+                for name in files:
+                    video_path = os.path.join(root, name)
+                    rel_path = os.path.join(
+                        os.path.relpath(root, self.library_path), name)
+                    if not is_commonly_not_used(name):
+                        v, _ = LeagueVideo.objects.get_or_create(
+                            video_full_path=video_path,
+                            video_rel_path=rel_path,
+                            league=self)
+
+        update_video_objects(self.library_path)
+        if self.play_path:
+            update_video_objects(self.play_path)
 
 
 class LeagueVideo(models.Model):
