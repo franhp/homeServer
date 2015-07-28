@@ -1,4 +1,5 @@
 import os
+import requests
 from datetime import datetime
 
 from django.conf import settings
@@ -9,10 +10,7 @@ from youtube_dl import YoutubeDL
 
 class VideoDownloader(models.Model):
     name = models.CharField(max_length=255)
-    website = models.CharField(max_length=255, null=True, blank=True)
-    element_query = models.TextField(blank=True)
-    title_query = models.TextField(blank=True)
-    url_query = models.TextField(blank=True)
+    find_url_logic = models.TextField(blank=True, null=True)
     scheduled = models.BooleanField(default=False)
     output_dir = models.CharField(
         max_length=255, default=settings.DEFAULT_OUTPUT_DIR)
@@ -25,13 +23,13 @@ class VideoDownloader(models.Model):
         self.downloads.create(title=title, video_url=url)
 
     def find_urls(self):
+        """
+        Must return a list of tuples containing (title, url)
+        Can use requests or the pyquery library
+        """
         urls = []
-        html = PyQuery(url=self.website)
-        elements = html(self.element_query)  # TODO doesn't work on all sites
-        for element in elements:
-            title = eval(self.title_query)
-            url = eval(self.url_query)
-            urls.append((title, url))
+        assert requests and PyQuery  # Ensure dependencies are there
+        exec self.find_url_logic
         return urls
 
     def queue_all(self):
