@@ -19,7 +19,7 @@ class League(models.Model):
     def common_words(self):
         def is_too_common(word):
             is_video_extension = word.upper() in ('MP4', 'AVI', 'FLV', 'THE')
-            is_too_short = len(word) < 3
+            is_too_short = len(word) <= 3
             is_number = word.isdigit()
             return is_video_extension or is_too_short or is_number
 

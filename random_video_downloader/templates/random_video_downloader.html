@@ -7,7 +7,7 @@
             <thead style="font-weight: bold;">
                 <td>Provider</td><td>Title</td><td>Last Update</td><td>Status</td>
             </thead>
-            {% for download in downloads %}
+            {% for download in downloads|slice:":50" %}
                 <tr>
                     <td>{{ download.provider }}</td>
                     <td>{{ download.title }}</td>
