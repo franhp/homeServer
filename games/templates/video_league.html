@@ -1,4 +1,11 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.17.0/mediaelement-and-player.min.js"
+        xmlns="http://www.w3.org/1999/html"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.17.0/mediaelementplayer.css" />
+{% endblock %}
 
 {% block content %}
 
@@ -7,28 +14,104 @@
 
     {% endif %}
 
-    <h1>Ranking</h1>
-
-    <h2>Top</h2>
-    {% for r in ranking|slice:":10" %}
-        {{ r.name }} - {{ r.votes }}<br>
-    {% endfor %}
-
-    <h2>Bottom</h2>
-    {% for r in ranking|slice:"-5:" %}
-        {{ r.name }} - {{ r.votes }}<br>
-    {% endfor %}
-
-
     <h1>Contestants</h1>
 
+    <div class="row">
+        <div class="col-md-5 col-sm-12">
+            <h2>
+                <form method="post" action="{% url 'league' %}">
+                    {% csrf_token %}
 
-    {{ contestant1.name }}<br>
+                    <span class="badge">{{ contestant1.popularity }}</span>
+                    {{ contestant1.name|slice:":20" }}
+
+                    <input type="hidden" name="vote_down" value="{{ contestant2.id }}" />
+                    <button type="submit" name="vote_up" value="{{ contestant1.id }}" class="btn btn-success"><span class="glyphicon glyphicon-heart"></span> </button>
+
+                </form>
+            </h2>
+            <video width="460" height="240" controls="controls" preload="none" >
+                <source src="{% static contestant1.video_rel_path %}" type="video/{{ contestant1.video_rel_path|slice:"-3:" }}" />
+            </video>
+        </div>
+        <div class="col-md-2 col-sm-12">
+            <h1>VS</h1>
+            <button class="btn btn-danger" onclick="window.location.reload()">Tie!</button>
+        </div>
+        <div class="col-md-5 col-sm-12">
+            <h2>
+                <form method="post" action="{% url 'league' %}">
+                    {% csrf_token %}
+
+                    <span class="badge">{{ contestant2.popularity }}</span>
+                    {{ contestant2.name|slice:":20" }}
+
+                    <input type="hidden" name="vote_down" value="{{ contestant1.id }}" />
+                    <button type="submit" name="vote_up" value="{{ contestant2.id }}" class="btn btn-success"><span class="glyphicon glyphicon-heart"></span> </button>
+
+                </form>
+            </h2>
+            <video width="460" height="240" controls="controls" preload="none" >
+                <source src="{% static contestant2.video_rel_path %}" type="video/{{ contestant2.video_rel_path|slice:"-3:" }}" />
+            </video>
+        </div>
+    </div>
+
+    <hr />
+
+    <div class="row">
+        <h2>League Tables</h2>
+        <div class="col-sm-6">
+            <h2>Top</h2>
+            <ul class="list-group">
+                {% for r in ranking|slice:":10" %}
+                    <li class="list-group-item">{{ r.name }}<span class="badge">{{ r.votes }}</span> </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="col-sm-6">
+            <h3>Bottom</h3>
+            <ul class="list-group">
+                {% for r in ranking|slice:"-5:" %}
+                    <li class="list-group-item">
+                    <form action="{% url 'league' %}" method="post">
+                        {% csrf_token %}
+                        <span class="badge">{{ r.votes }}</span>
+
+                        {{ r.name }}
+
+                        <button class="btn btn-danger btn-xs" type="submit" name="delete_id" value="{{ r.id }}"><span class="glyphicon glyphicon-remove"></span> </button>
+
+                    </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
 
 
-    vs<br>
+{% endblock %}
 
 
-    {{ contestant2.name }}
+{% block extra_javascript %}
+<script>
+$('video,audio').mediaelementplayer({
+    // shows debug errors on screen
+    enablePluginDebug: true,
+    // remove or reorder to change plugin priority
+    plugins: ['flash','silverlight'],
+    // specify to force MediaElement to use a particular video or audio type
+    type: '',
+    // path to Flash and Silverlight plugins
+    pluginPath: '{{ STATIC_URL }}',
+    // name of flash file
+    flashName: 'flashmediaelement.swf',
+    // name of silverlight file
+    silverlightName: 'silverlightmediaelement.xap',
+    // rate in milliseconds for Flash and Silverlight to fire the timeupdate event
+    // larger number is less accurate, but less strain on plugin->JavaScript bridge
+    timerRate: 250
+});
 
+</script>
 {% endblock %}

@@ -49,6 +49,24 @@ class LeagueView(TemplateView):
             'contestant2': contestants[1]
         })
 
+    def post(self, request, *args, **kwargs):
+        vote_up = request.POST.get('vote_up')
+        vote_down = request.POST.get('vote_down')
+        delete_id = request.POST.get('delete_id')
+
+        if vote_up:
+            vid1 = LeagueVideo.objects.get(id=vote_up)
+            vid1.vote_up()
+
+            vid2 = LeagueVideo.objects.get(id=vote_down)
+            vid2.vote_down()
+
+        elif delete_id:
+            vid = LeagueVideo.objects.get(id=delete_id)
+            vid.delete_video()
+
+        return HttpResponseRedirect(reverse('league'))
+
 
 class FilterGameView(TemplateView):
     pass
