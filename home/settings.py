@@ -86,7 +86,9 @@ class Base(Configuration):
     # Static files (CSS, JavaScript, Images)
     # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
-    STATIC_URL = 'http://localhost/static/'
+    STATIC_URL = '/static/'
+
+    MEDIA_URL = 'http://localhost/media/'
 
 
 class Dev(Base):

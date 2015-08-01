@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block extra_head %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.17.0/mediaelement-and-player.min.js"
@@ -32,7 +31,7 @@
             </h2>
 
             <video width="700" height="500" controls="controls" preload="none" >
-                <source src="{% static videos.0.video_rel_path %}" type="video/{{ videos.0.video_rel_path|slice:"-3:" }}" />
+                <source src="{{ MEDIA_URL }}{{ videos.0.video_rel_path }}" type="video/{{ videos.0.video_rel_path|slice:"-3:" }}" />
             </video>
         </div>
 

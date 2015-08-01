@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block extra_head %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.17.0/mediaelement-and-player.min.js"
@@ -31,7 +30,7 @@
                 </form>
             </h2>
             <video width="460" height="240" controls="controls" preload="none" >
-                <source src="{% static contestant1.video_rel_path %}" type="video/{{ contestant1.video_rel_path|slice:"-3:" }}" />
+                <source src="{{ MEDIA_URL }}{{ contestant1.video_rel_path }}" type="video/{{ contestant1.video_rel_path|slice:"-3:" }}" />
             </video>
         </div>
         <div class="col-md-2 col-sm-12" style="text-align: center;">
@@ -53,7 +52,7 @@
                 </form>
             </h2>
             <video width="460" height="240" controls="controls" preload="none" >
-                <source src="{% static contestant2.video_rel_path %}" type="video/{{ contestant2.video_rel_path|slice:"-3:" }}" />
+                <source src="{{ MEDIA_URL }}{{ contestant2.video_rel_path }}" type="video/{{ contestant2.video_rel_path|slice:"-3:" }}" />
             </video>
         </div>
     </div>
