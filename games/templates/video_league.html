@@ -34,9 +34,10 @@
                 <source src="{% static contestant1.video_rel_path %}" type="video/{{ contestant1.video_rel_path|slice:"-3:" }}" />
             </video>
         </div>
-        <div class="col-md-2 col-sm-12">
+        <div class="col-md-2 col-sm-12" style="text-align: center;">
+            <br><br><br>
             <h1>VS</h1>
-            <button class="btn btn-danger" onclick="window.location.reload()">Tie!</button>
+            <button class="btn btn-danger" onclick="window.location.reload()"><span class="glyphicon glyphicon-refresh"></span></button>
         </div>
         <div class="col-md-5 col-sm-12">
             <h2>
@@ -57,10 +58,10 @@
         </div>
     </div>
 
-    <hr />
-
     <div class="row">
-        <h2>League Tables</h2>
+        <div class="page-header">
+          <h1>League Tables <small>({{ ranking|length }} remaining)</small></h1>
+        </div>
         <div class="col-sm-6">
             <h2>Top</h2>
             <ul class="list-group">
