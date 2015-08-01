@@ -1,19 +1,110 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.17.0/mediaelement-and-player.min.js"
+        xmlns="http://www.w3.org/1999/html"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.17.0/mediaelementplayer.css" />
+{% endblock %}
 
 {% block content %}
-    <h1>Ranking</h1>
+
 
     {% if not ranking %}
     Must Create League with name `RandomDirectory`
     {% endif %}
 
-    {% for word in ranking %}
-        {{ word.0 }} -  {{ word.1 }} <br>
-    {% endfor %}
+    {% if videos %}
+
+        <div class="col-sm-12 col-md-9">
+            <h2>
+                <form method="post" action="{% url 'random-directory' %}">
+                    {% csrf_token %}
+
+                    <span class="badge">{{ videos.0.popularity }}</span>
+                    {{ videos.0.name }}
+
+                    <div class="btn-group  btn-group-lg" role="group">
+                      <button type="submit" name="archive_id" value="{{ videos.0.id }}" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span> </button>
+                      <button type="submit" name="delete_id" value="{{ videos.0.id }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove-sign"></span></button>
+                    </div>
+                </form>
+            </h2>
+
+            <video width="700" height="500" controls="controls" preload="none" >
+                <source src="{% static videos.0.video_rel_path %}" type="video/{{ videos.0.video_rel_path|slice:"-3:" }}" />
+            </video>
+        </div>
+
+        <div class="col-md-3 col-sm-12 pull-right">
+            <h2>Ranking</h2>
+            <ol>
+            {% for word in ranking %}
+                <li>{{ word.0 }} <span class="badge">{{ word.1 }} times</span> </li>
+            {% endfor %}
+            </ol>
+        </div>
 
 
-    <h1>Videos</h1>
-    {% for video in videos %}
-        {{ video.video_rel_path }} - {{ video.popularity }} - {{ video.name }} <br>
-    {% endfor %}
+        <div class="col-md-3 col-sm-12 pull-right">
+            <h2>All Videos</h2>
+            <ul class="list-group">
+            {% for video in videos %}
+                <li class="list-group-item">
+                    <form method="post" action="{% url 'random-directory' %}">
+                        {% csrf_token %}
+
+                        <span class="badge">{{ video.popularity }}</span>
+                        {{ video.name }}
+
+                        <div class="btn-group  btn-group-xs" role="group">
+                          <button type="submit" name="archive_id" value="{{ video.id }}" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span> </button>
+                          <button type="submit" name="delete_id" value="{{ video.id }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove-sign"></span></button>
+                        </div>
+                    </form>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+
+    {% else %}
+        <div class="alert alert-info"> <h4>Yay! No videos left!</h4></div>
+
+
+        <h2>Ranking</h2>
+        <ol>
+        {% for word in ranking %}
+            <li>{{ word.0 }} <span class="badge">{{ word.1 }} times</span> </li>
+        {% endfor %}
+        </ol>
+
+    {% endif %}
+
+
+
+{% endblock %}
+
+{% block extra_javascript %}
+<script>
+$('video,audio').mediaelementplayer({
+    // shows debug errors on screen
+    enablePluginDebug: true,
+    // remove or reorder to change plugin priority
+    plugins: ['flash','silverlight'],
+    // specify to force MediaElement to use a particular video or audio type
+    type: '',
+    // path to Flash and Silverlight plugins
+    pluginPath: '{{ STATIC_URL }}',
+    // name of flash file
+    flashName: 'flashmediaelement.swf',
+    // name of silverlight file
+    silverlightName: 'silverlightmediaelement.xap',
+    // rate in milliseconds for Flash and Silverlight to fire the timeupdate event
+    // larger number is less accurate, but less strain on plugin->JavaScript bridge
+    timerRate: 250
+});
+
+$('.carousel').carousel('pause');
+
+</script>
 {% endblock %}

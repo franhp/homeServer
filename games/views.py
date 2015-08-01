@@ -1,7 +1,9 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
-from games.models import League
+from games.models import League, LeagueVideo
+from django.core.urlresolvers import reverse
+from django.http.response import HttpResponseRedirect
 
 
 class RandomDirectoryCleanerView(TemplateView):
@@ -18,6 +20,17 @@ class RandomDirectoryCleanerView(TemplateView):
             'ranking': league.words_ranking(),
             'videos': league.list_videos_by_popularity(league.play_path)
         })
+
+    def post(self, request, *args, **kwargs):
+        archive = request.POST.get('archive_id')
+        delete = request.POST.get('delete_id')
+        if archive:
+            vid = LeagueVideo.objects.get(id=archive)
+            vid.archive_video()
+        elif delete:
+            vid = LeagueVideo.objects.get(id=delete)
+            vid.delete_video()
+        return HttpResponseRedirect(reverse('random-directory'))
 
 
 class LeagueView(TemplateView):

@@ -39,7 +39,7 @@ class League(models.Model):
             video_full_path__startswith=videos_path))
 
         if key:
-            return sorted(all_videos, key=key)
+            return sorted(all_videos, key=key, reverse=True)
         else:
             return all_videos
 
