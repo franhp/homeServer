@@ -27,7 +27,7 @@ class League(models.Model):
         for video in self.list_videos(self.library_path):
             for w in video.words:
                 if not is_too_common(w):
-                    words.append(w)
+                    words.append(w.lower())
         return Counter(words)
 
     def words_ranking(self):
