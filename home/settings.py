@@ -88,7 +88,7 @@ class Base(Configuration):
 
     STATIC_URL = '/static/'
 
-    MEDIA_URL = 'http://localhost/media/'
+    MEDIA_URL = 'http://franhp.no-ip.org/media/'
 
 
 class Dev(Base):
