@@ -21,7 +21,14 @@
                 <form method="post" action="{% url 'league' %}">
                     {% csrf_token %}
 
-                    <span class="badge">{{ contestant1.popularity }}</span>
+                     {% if contestant1.popularity > 30 %}
+                            <span class="badge" style="font-size: xx-large; background-color: darkred;">
+                    {% elif contestant1.popularity > 15 and contestant1.popularity < 30  %}
+                        <span class="badge" style="font-size: large; background-color: orange;">
+                    {% else %}
+                        <span class="badge">
+                    {% endif %}
+                    {{ contestant1.popularity }}</span>
                     {{ contestant1.name|slice:":20" }}
 
                     <input type="hidden" name="vote_down" value="{{ contestant2.id }}" />
@@ -43,7 +50,13 @@
                 <form method="post" action="{% url 'league' %}">
                     {% csrf_token %}
 
-                    <span class="badge">{{ contestant2.popularity }}</span>
+                     {% if contestant2.popularity > 30 %}
+                        <span class="badge" style="font-size: xx-large; background-color: darkred;">
+                    {% elif contestant2.popularity > 15 and contestant2.popularity < 30  %}
+                        <span class="badge" style="font-size: large; background-color: orange;">
+                    {% else %}
+                        <span class="badge">
+                    {% endif %}{{ contestant2.popularity }}</span>
                     {{ contestant2.name|slice:":20" }}
 
                     <input type="hidden" name="vote_down" value="{{ contestant1.id }}" />
