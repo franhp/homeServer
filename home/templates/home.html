@@ -1,7 +1,64 @@
 {% extends 'base.html' %}
 
+{% block extra_head %}
+    <style>
+
+        .bubble
+        {
+            position: relative;
+            width: 400px;
+            height: 200px;
+            padding: 0px;
+            background: #FFFFFF;
+            -webkit-border-radius: 10px;
+            -moz-border-radius: 10px;
+            border-radius: 10px;
+            border: #7F7F7F solid 5px;
+            font-size: 150px;
+            text-align: center;
+        }
+
+        .bubble:after
+        {
+            content: '';
+            position: absolute;
+            border-style: solid;
+            border-width: 15px 34px 15px 0;
+            border-color: transparent #FFFFFF;
+            display: block;
+            width: 0;
+            z-index: 1;
+            left: -34px;
+            top: 135px;
+        }
+
+        .bubble:before
+        {
+            content: '';
+            position: absolute;
+            border-style: solid;
+            border-width: 19px 38px 19px 0;
+            border-color: transparent #7F7F7F;
+            display: block;
+            width: 0;
+            z-index: 0;
+            left: -43px;
+            top: 131px;
+        }
+
+    </style>
+
+{% endblock %}
+
 {% block content %}
 <br>
-    <img src="http://franhp.net/static/img/hackergotchi.png">
+    <div class="col-sm-5">
+        <img src="http://franhp.net/static/img/hackergotchi-big.png">
+    </div>
+    <div class="col-sm-6">
+        <p class="bubble">LoL!</p>
+    </div>
+
+
 <br>
 {% endblock %}
