@@ -15,6 +15,7 @@ class VideoDownloader(models.Model):
     output_dir = models.CharField(
         max_length=255, default=settings.DEFAULT_OUTPUT_DIR)
     last_execution = models.DateTimeField(null=True, blank=True)
+    force = models.BooleanField(default=False)
 
     def __unicode__(self):
         return self.name
@@ -34,6 +35,7 @@ class VideoDownloader(models.Model):
 
     def queue_all(self):
         self.last_execution = datetime.now()
+        self.force = False
         self.save()
 
         for title, url in self.find_urls():

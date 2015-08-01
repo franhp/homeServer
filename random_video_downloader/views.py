@@ -19,6 +19,24 @@ class VideoDownloaderView(TemplateView):
     def post(self, request, *args, **kwargs):
         url = request.POST.get('add_url')
         title = request.POST.get('add_title')
+        restart = request.POST.get('restart')
+        stop = request.POST.get('stop')
+        mass = request.POST.get('mass')
+        trigger = request.POST.get('trigger')
+
         manual, _ = VideoDownloader.objects.get_or_create(name='Manual')
-        Video.objects.create(video_url=url, title=title, provider=manual)
+        if url:
+            t = title if title else url[-20:]
+            Video.objects.create(video_url=url, title=t, provider=manual)
+        elif mass:
+            for url in mass.split():
+                t = url[-20:]
+                Video.objects.create(video_url=url, provider=manual, title=t)
+        elif restart:
+            Video.objects.filter(id=restart).update(status=Video.NOT_STARTED)
+        elif stop:
+            Video.objects.get(id=stop).delete()
+        elif trigger:
+            VideoDownloader.objects.filter(id=trigger).update(force=True)
+
         return HttpResponseRedirect(reverse('downloader'))

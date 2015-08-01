@@ -5,7 +5,7 @@
         <h1>List latest downloads</h1>
         <table class="table table-striped">
             <thead style="font-weight: bold;">
-                <td>Provider</td><td>Title</td><td>Last Update</td><td>Status</td>
+                <td>Provider</td><td>Title</td><td>Last Update</td><td>Status</td><td>Action</td>
             </thead>
             {% for download in downloads|slice:":50" %}
                 <tr>
@@ -13,6 +13,21 @@
                     <td>{{ download.title }}</td>
                     <td>{{ download.updated_on }}</td>
                     <td>{{ download.get_status_display }}</td>
+                    <td>
+                        <form action="{% url 'downloader' %}" method="post">
+                        {% csrf_token %}
+
+                        {% if download.get_status_display == 'Error' %}
+                                <button class="btn btn-warning btn-sm" name="restart" value="{{ download.id }}" type="submit">
+                                    <span class="glyphicon glyphicon-repeat"></span>
+                                </button>
+                        {% else %}
+                                <button class="btn btn-danger btn-sm" name="stop" value="{{ download.id }}" type="submit">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                        {% endif %}
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         </table>
@@ -20,36 +35,62 @@
     </div>
 
     <div class="col-sm-12 col-md-4">
-        <h1>Queue download</h1>
-        <form method="POST" action="{% url 'downloader' %}" class="form-horizontal">
-        {% csrf_token %}
-            <div class="form-group">
-                <label for="add_title" class="col-sm-2">Title:</label>
-                <div class="col-sm-10">
-                    <input type="text" name="add_title" id='add_title' class="form-control" placeholder="My Video">
+        <div class="row">
+            <h2>Queue download</h2>
+            <form method="POST" action="{% url 'downloader' %}" class="form-horizontal">
+            {% csrf_token %}
+                <div class="form-group">
+                    <label for="add_title" class="col-sm-2">Title:</label>
+                    <div class="col-sm-10">
+                        <input type="text" name="add_title" id='add_title' class="form-control" placeholder="My Video (optional)">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label for="add_url" class="col-sm-2">URL:</label>
-                <div class="col-sm-10">
-                    <input type="text" name="add_url" id='add_url' class="form-control" placeholder="http://...">
+                <div class="form-group">
+                    <label for="add_url" class="col-sm-2">URL:</label>
+                    <div class="col-sm-10">
+                        <div class="input-group">
+                             <input type="text" name="add_url" id='add_url' class="form-control" placeholder="http://...">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-success pull-right"><span class="glyphicon glyphicon-floppy-disk"></span> </button>
+                            </span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        <button type="submit" class="btn btn-default pull-right">Queue</button>
-        </form>
+
+            </form>
+        </div>
+        <div class="row">
+            <h2>Mass Downloader</h2>
+            <form method="POST" action="{% url 'downloader' %}" >
+                {% csrf_token %}
+                <div class="col-sm-9">
+                <textarea class="form-control" style="width:300px; height: 100px;" name="mass" placeholder="url1
+url2
+..."></textarea></div>
+                <div class="col-sm-3">
+                    <button type="submit" class="btn btn-info pull-right"><span class="glyphicon glyphicon-floppy-save"></span> </button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <div class="col-sm-12 col-md-4">
-        <h1>Download Providers</h1>
+        <h2>Download Providers</h2>
         <table class="table table-striped">
             <thead style="font-weight: bold;">
-                <td>Job Name</td><td>Last Execution</td><td>Scheduled?</td>
+                <td>Job Name</td><td>Last Execution</td><td>Scheduled?</td><td>Force?</td>
             </thead>
             {% for job in jobs %}
                 <tr>
                     <td>{{ job.name }}</td>
                     <td><small>{{ job.last_execution|date:"d b" }}</small></td>
                     <td>{{ job.scheduled }}</td>
+                    <td>
+                        <form method="post" action="{% url 'downloader' %}">
+                            {% csrf_token %}
+                            {{ job.force }} <button type="submit" class="btn btn-danger btn-xs" name="trigger" value="{{ job.id }}"><span class="glyphicon glyphicon-time"></span> </button>
+                        </form>
+                    </td>
                 </tr>
             {% endfor %}
         </table>
