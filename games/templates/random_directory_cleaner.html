@@ -16,7 +16,7 @@
     {% if videos %}
 
         <div class="col-sm-12 col-md-9">
-            <h2>
+            <h3>
                 <form method="post" action="{% url 'random-directory' %}">
                     {% csrf_token %}
 
@@ -28,7 +28,7 @@
                       <button type="submit" name="delete_id" value="{{ videos.0.id }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove-sign"></span></button>
                     </div>
                 </form>
-            </h2>
+            </h3>
 
             <video width="700" height="500" controls="controls" preload="none" >
                 <source src="{{ MEDIA_URL }}{{ videos.0.video_rel_path }}" type="video/{{ videos.0.video_rel_path|slice:"-3:" }}" />
@@ -37,33 +37,38 @@
 
         <div class="col-md-3 col-sm-12 pull-right">
             <h2>Ranking</h2>
-            <ol>
+            <ul class="list-group">
             {% for word in ranking %}
-                <li>{{ word.0 }} <span class="badge">{{ word.1 }} times</span> </li>
+                <li class="list-group-item">{{ word.0 }} <span class="badge">{{ word.1 }} times</span> </li>
             {% endfor %}
-            </ol>
+            </ul>
         </div>
 
 
         <div class="col-md-3 col-sm-12 pull-right">
             <h2>All Videos</h2>
-            <ul class="list-group">
+            <table class="table">
+            <thead>
+            <td>Score</td><td>Name</td><td>Actions</td>
+            </thead>
+            <tr>
             {% for video in videos %}
-                <li class="list-group-item">
-                    <form method="post" action="{% url 'random-directory' %}">
-                        {% csrf_token %}
+                <tr>
+                    <td><span class="badge">{{ video.popularity }}</span></td>
+                    <td>{{ video.name|slice:":25" }}</td>
+                    <td>
+                        <form method="post" action="{% url 'random-directory' %}">
+                            {% csrf_token %}
+                            <div class="btn-group  btn-group-xs" role="group">
+                              <button type="submit" name="archive_id" value="{{ video.id }}" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span> </button>
+                              <button type="submit" name="delete_id" value="{{ video.id }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove-sign"></span></button>
+                            </div>
+                        </form>
+                    </td>
 
-                        <span class="badge">{{ video.popularity }}</span>
-                        {{ video.name|slice:":25" }}
-
-                        <div class="btn-group  btn-group-xs" role="group">
-                          <button type="submit" name="archive_id" value="{{ video.id }}" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span> </button>
-                          <button type="submit" name="delete_id" value="{{ video.id }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove-sign"></span></button>
-                        </div>
-                    </form>
-                </li>
+                </tr>
             {% endfor %}
-            </ul>
+            </table>
         </div>
 
     {% else %}
