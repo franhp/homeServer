@@ -16,15 +16,18 @@
                     <td>
                         <form action="{% url 'downloader' %}" method="post">
                         {% csrf_token %}
-
-                        {% if download.get_status_display == 'Error' %}
-                                <button class="btn btn-warning btn-sm" name="restart" value="{{ download.id }}" type="submit">
-                                    <span class="glyphicon glyphicon-repeat"></span>
-                                </button>
-                        {% else %}
+                        {% if download.get_status_display != 'Finished' %}
+                            <div class="btn-group">
                                 <button class="btn btn-danger btn-sm" name="stop" value="{{ download.id }}" type="submit">
                                     <span class="glyphicon glyphicon-remove"></span>
                                 </button>
+                                <button class="btn btn-warning btn-sm" name="restart" value="{{ download.id }}" type="submit"
+                                        data-toggle="tooltip" data-placement="right" title="{{ download.error }}">
+                                    <span class="glyphicon glyphicon-repeat"></span>
+                                </button>
+                            </div>
+                        {% else %}
+                            <button class="btn btn-default" disabled><span class="glyphicon glyphicon-ban-circle"></span> </button>
                         {% endif %}
                         </form>
                     </td>
@@ -96,5 +99,16 @@ url2
         </table>
     </div>
 
+
+{% endblock %}
+
+{% block extra_javascript %}
+    <script>
+
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+
+    </script>
 
 {% endblock %}

@@ -1,4 +1,5 @@
 import os
+import itertools
 import requests
 from datetime import datetime
 
@@ -43,7 +44,7 @@ class VideoDownloader(models.Model):
                 self.queue_download(title, url)
 
     def _is_already_downloaded(self, video_url):
-        return self.downloads.filter(video_url=video_url).exists()
+        return Video.objects.filter(video_url=video_url).exists()
 
 
 class Video(models.Model):
@@ -91,4 +92,7 @@ class Video(models.Model):
 
     @staticmethod
     def list_downloads():
-        return Video.objects.all().order_by('-updated_on')[:50]
+        return itertools.chain(Video.objects.all().order_by('-updated_on')[:40],
+                               Video.objects.exclude(
+                                   status=Video.FINISHED
+                               ).order_by('-updated_on'))

@@ -10,7 +10,7 @@ class Base(Configuration):
     # Quick-start development settings - unsuitable for production
     # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
-    ALLOWED_HOSTS = []
+    ALLOWED_HOSTS = ['*']
 
     # Application definition
 
@@ -112,4 +112,4 @@ class Prod(Base):
 
     # Video Downloader
     DEFAULT_OUTPUT_DIR = os.environ.get(
-        'DEFAULT_OUTPUT_DIR', os.path.join('/tmp/', 'Downloads'))
+        'DEFAULT_OUTPUT_DIR', os.path.join('~', 'Downloads'))

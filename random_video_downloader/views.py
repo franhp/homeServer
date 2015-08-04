@@ -35,7 +35,7 @@ class VideoDownloaderView(TemplateView):
         elif restart:
             Video.objects.filter(id=restart).update(status=Video.NOT_STARTED)
         elif stop:
-            Video.objects.get(id=stop).delete()
+            Video.objects.filter(id=stop).update(status=Video.FINISHED)
         elif trigger:
             VideoDownloader.objects.filter(id=trigger).update(force=True)
 
