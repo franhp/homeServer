@@ -1,8 +1,8 @@
 import os
-import itertools
-import requests
-from datetime import datetime
+from datetime import datetime, timedelta
+from django.db.models.query_utils import Q
 
+import requests
 from django.conf import settings
 from django.db import models
 from pyquery import PyQuery
@@ -92,7 +92,6 @@ class Video(models.Model):
 
     @staticmethod
     def list_downloads():
-        return itertools.chain(Video.objects.all().order_by('-updated_on')[:40],
-                               Video.objects.exclude(
-                                   status=Video.FINISHED
-                               ).order_by('-updated_on'))
+        last_week = datetime.now() - timedelta(days=7)
+        qs = (Q(updated_on__gt=last_week) | ~Q(status=Video.NOT_STARTED))
+        return Video.objects.filter(qs).order_by('-updated_on')
