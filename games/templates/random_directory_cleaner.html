@@ -42,17 +42,7 @@
         </div>
 
         <div class="col-md-3 col-sm-12 pull-right">
-            <h2>Ranking</h2>
-            <ul class="list-group">
-            {% for word in ranking %}
-                <li class="list-group-item">{{ word.0 }} <span class="badge">{{ word.1 }} times</span> </li>
-            {% endfor %}
-            </ul>
-        </div>
-
-
-        <div class="col-md-3 col-sm-12 pull-right">
-            <h2>All Videos</h2>
+            <h2>All Videos <br><small>({{ videos|length }} remaining)</small></h2>
             <table class="table">
             <thead>
             <td>Score</td><td>Name</td><td>Actions</td>
@@ -84,6 +74,16 @@
             {% endfor %}
             </table>
         </div>
+
+        <div class="col-md-3 col-sm-12 pull-right">
+            <h2>Ranking</h2>
+            <ul class="list-group">
+            {% for word in ranking %}
+                <li class="list-group-item">{{ word.0 }} <span class="badge">{{ word.1 }} times</span> </li>
+            {% endfor %}
+            </ul>
+        </div>
+
 
     {% else %}
         <div class="alert alert-info"> <h4>Yay! No videos left!</h4></div>
