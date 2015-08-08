@@ -35,8 +35,15 @@ class League(models.Model):
             self.common_words().most_common(10), key=lambda x: x[1]))
 
     def list_videos(self, videos_path, key=None):
-        all_videos = list(self.league.filter(
-            video_full_path__startswith=videos_path))
+        if videos_path == self.play_path:
+            all_videos = list(self.league.filter(
+                video_full_path__startswith=self.play_path))
+        else:
+            all_videos = list(
+                self.league.filter(
+                    video_full_path__startswith=videos_path
+                ).exclude(
+                    video_full_path__startswith=self.play_path))
 
         if key:
             return sorted(all_videos, key=key, reverse=True)
@@ -76,8 +83,8 @@ class League(models.Model):
                             league=self)
 
         update_video_objects(self.library_path)
-        if self.play_path:
-            update_video_objects(self.play_path)
+        # TODO some day they may be separate
+        # update_video_objects(self.play_path)
 
 
 class LeagueVideo(models.Model):
