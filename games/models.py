@@ -86,6 +86,9 @@ class League(models.Model):
         # TODO some day they may be separate
         # update_video_objects(self.play_path)
 
+    def total_size(self, videos_path):
+        return sum(x.size for x in self.list_videos(videos_path))
+
 
 class LeagueVideo(models.Model):
     votes = models.IntegerField(default=0)
@@ -115,8 +118,12 @@ class LeagueVideo(models.Model):
     def words(self):
         return re.findall(r'[a-zA-Z0-9]+', self.name)
 
+    @property
+    def size(self):
+        return os.stat(self.video_full_path).st_size
+
     def save(self, *args, **kwargs):
-        if self.votes < -3:
+        if self.votes < -5:
             self.delete_video()
         else:
             super(LeagueVideo, self).save(*args, **kwargs)

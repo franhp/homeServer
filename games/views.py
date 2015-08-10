@@ -18,7 +18,8 @@ class RandomDirectoryCleanerView(TemplateView):
 
         return render(request, self.template_name, {
             'ranking': league.words_ranking(),
-            'videos': league.list_videos_by_popularity(league.play_path)
+            'videos': league.list_videos_by_popularity(league.play_path),
+            'total_size': league.total_size(league.play_path)
         })
 
     def post(self, request, *args, **kwargs):
@@ -46,7 +47,8 @@ class LeagueView(TemplateView):
         return render(request, self.template_name, {
             'ranking': league.list_videos_by_votes(league.library_path),
             'contestant1': contestants[0],
-            'contestant2': contestants[1]
+            'contestant2': contestants[1],
+            'total_size': league.total_size(league.library_path)
         })
 
     def post(self, request, *args, **kwargs):
