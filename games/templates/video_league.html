@@ -77,15 +77,15 @@
         <div class="col-sm-6">
             <h2>Top</h2>
             <ul class="list-group">
-                {% for r in ranking|slice:":10" %}
+                {% for r in ranking|slice:":15" %}
                     <li class="list-group-item">{{ r.name }}<span class="badge">{{ r.votes }}</span> </li>
                 {% endfor %}
             </ul>
         </div>
         <div class="col-sm-6">
-            <h3>Bottom</h3>
+            <h2>Bottom</h2>
             <ul class="list-group">
-                {% for r in ranking|slice:"-5:" %}
+                {% for r in ranking|slice:"-15:" %}
                     <li class="list-group-item">
                     <form action="{% url 'league' %}" method="post">
                         {% csrf_token %}
