@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from games.views import RandomDirectoryCleanerView, LeagueView
 from home.views import HomeView
-from random_video_downloader.views import VideoDownloaderView
+from video_downloader.views import VideoDownloaderView
 
 from transmission.views import TransmissionView
 

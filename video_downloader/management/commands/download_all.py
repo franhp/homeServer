@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.db.models.query_utils import Q
-from random_video_downloader.models import VideoDownloader, Video
+from video_downloader.models import VideoDownloader, Video
 
 from datetime import datetime, timedelta
 

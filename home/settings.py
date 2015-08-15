@@ -23,7 +23,7 @@ class Base(Configuration):
         'django.contrib.staticfiles',
         'home',
         'transmission',
-        'random_video_downloader',
+        'video_downloader',
         'games',
     )
 

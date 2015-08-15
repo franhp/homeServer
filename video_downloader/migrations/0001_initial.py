@@ -44,7 +44,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='video',
             name='provider',
-            field=models.ForeignKey(related_name=b'downloads', to='random_video_downloader.VideoDownloader'),
+            field=models.ForeignKey(related_name=b'downloads', to='video_downloader.VideoDownloader'),
             preserve_default=True,
         ),
     ]

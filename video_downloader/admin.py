@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from random_video_downloader.models import VideoDownloader, Video
+from video_downloader.models import VideoDownloader, Video
 
 
 class VideoAdmin(admin.ModelAdmin):

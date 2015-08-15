@@ -7,7 +7,7 @@ from django.db import models, migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('random_video_downloader', '0001_initial'),
+        ('video_downloader', '0001_initial'),
     ]
 
     operations = [

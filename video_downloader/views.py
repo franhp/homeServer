@@ -3,11 +3,11 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
 
-from random_video_downloader.models import Video, VideoDownloader
+from video_downloader.models import Video, VideoDownloader
 
 
 class VideoDownloaderView(TemplateView):
-    template_name = 'random_video_downloader.html'
+    template_name = 'video_downloader.html'
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name, {
