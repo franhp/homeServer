@@ -25,6 +25,7 @@ class Base(Configuration):
         'transmission',
         'video_downloader',
         'games',
+        'say',
     )
 
     MIDDLEWARE_CLASSES = (
