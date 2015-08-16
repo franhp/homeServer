@@ -1,5 +1,7 @@
 import os
+
 from configurations import Configuration, values
+from kombu import Queue, Exchange
 
 
 class Base(Configuration):
@@ -10,7 +12,6 @@ class Base(Configuration):
     # Quick-start development settings - unsuitable for production
     # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
-    ALLOWED_HOSTS = ['*']
 
     # Application definition
 
@@ -22,9 +23,9 @@ class Base(Configuration):
         'django.contrib.messages',
         'django.contrib.staticfiles',
         'home',
-        'transmission',
-        'video_downloader',
         'games',
+        'djcelery',
+        'smart_downloader',
     )
 
     MIDDLEWARE_CLASSES = (
@@ -87,13 +88,32 @@ class Base(Configuration):
     # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
     STATIC_URL = '/static/'
-
     MEDIA_URL = 'http://franhp.no-ip.org/media/'
+
+
+    # Celery
+    BROKER_URL = 'amqp://guest:guest@localhost//'
+
+    CELERY_ACCEPT_CONTENT = ['json']
+    CELERY_TASK_SERIALIZER = 'json'
+    CELERY_RESULT_SERIALIZER = 'json'
+
+    CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+    CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
+
+    CELERY_QUEUES = (
+        Queue('default', Exchange('default'), routing_key='default'),
+        Queue('downloads', Exchange('downloads'), routing_key='downloads'),
+    )
+    CELERY_DEFAULT_QUEUE = 'default'
+    CELERY_DEFAULT_EXCHANGE_TYPE = 'direct'
+    CELERY_DEFAULT_ROUTING_KEY = 'default'
 
 
 class Dev(Base):
     DEBUG = True
     TEMPLATE_DEBUG = DEBUG
+    ALLOWED_HOSTS = ['127.0.0.1']
 
     # Transmission
     TRANSMISSION_HOST = 'localhost'
@@ -105,6 +125,8 @@ class Dev(Base):
 
 class Prod(Base):
     DEBUG = False
+    TEMPLATE_DEBUG = DEBUG
+    ALLOWED_HOSTS = ['*']
 
     # Transmission
     TRANSMISSION_HOST = os.environ.get('TRANSMISSION_HOST', 'localhost')
