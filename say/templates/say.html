@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="post" action="{% url 'say' %}">
+    {% csrf_token %}
+
+    <div class="col-lg-3">
+        <div class="input-group">
+            <span class="input-group-addon" id="sizing-addon1">@</span>
+            <input type="text" class="form-control" placeholder="Username" name="who">
+        </div>
+    </div>
+
+    <div class="col-lg-9">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Your message" name="sentence">
+            <span class="input-group-btn">
+                <button type="submit" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-bullhorn"></span>
+                </button>
+            </span>
+        </div><!-- /input-group -->
+    </div><!-- /.col-lg-6 -->
+</form>
+
+    <br/><br/><hr/>
+    <h3>Previous sentences</h3>
+    {% if sentences %}
+        <ul class="list-group">
+            {% for message in sentences %}
+                <li class="list-group-item"><strong>{{ message.content }}</strong> <small>by <strong>{{ message.who }}</strong> on {{ message.created_on }}</small></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        No sentences yet
+    {% endif %}
+
+{% endblock %}

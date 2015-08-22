@@ -26,6 +26,7 @@ class Base(Configuration):
         'games',
         'djcelery',
         'smart_downloader',
+        'say',
     )
 
     MIDDLEWARE_CLASSES = (

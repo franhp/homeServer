@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.contrib.auth.decorators import login_required
 from games.views import RandomDirectoryCleanerView, LeagueView
 from home.views import HomeView
+from say.views import SayView
 from video_downloader.views import VideoDownloaderView
 
 from transmission.views import TransmissionView
@@ -17,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^accounts/', HomeView.as_view()),
     url(r'^admin/', include(admin.site.urls)),
 
+    url(r'^say/', SayView.as_view(), name='say'),
     url(r'^transmission/', login_required(
         TransmissionView.as_view()), name='transmission'),
     url(r'^downloader/', login_required(
