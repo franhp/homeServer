@@ -1,7 +1,6 @@
 import os
 
 from configurations import Configuration, values
-from kombu import Queue, Exchange
 
 
 class Base(Configuration):
@@ -24,9 +23,9 @@ class Base(Configuration):
         'django.contrib.staticfiles',
         'home',
         'games',
-        'djcelery',
         'smart_downloader',
         'say',
+        'djcelery',
     )
 
     MIDDLEWARE_CLASSES = (
@@ -65,8 +64,12 @@ class Base(Configuration):
 
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'database.sqlite3'),
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'homeserver',
+            'USER': 'root',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': '3306',
         }
     }
 
@@ -95,20 +98,14 @@ class Base(Configuration):
     # Celery
     BROKER_URL = 'amqp://guest:guest@localhost//'
 
-    CELERY_ACCEPT_CONTENT = ['json']
-    CELERY_TASK_SERIALIZER = 'json'
-    CELERY_RESULT_SERIALIZER = 'json'
+    CELERY_ACCEPT_CONTENT = ['pickle']
+    CELERY_TASK_SERIALIZER = 'pickle'
+    CELERY_RESULT_SERIALIZER = 'pickle'
 
     CELERY_RESULT_BACKEND = 'djcelery.backends.database:DatabaseBackend'
+    CELERY_RESULT_PERSISTENT = True
+    CELERY_TRACK_STARTED = True
     CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
-
-    CELERY_QUEUES = (
-        Queue('default', Exchange('default'), routing_key='default'),
-        Queue('downloads', Exchange('downloads'), routing_key='downloads'),
-    )
-    CELERY_DEFAULT_QUEUE = 'default'
-    CELERY_DEFAULT_EXCHANGE_TYPE = 'direct'
-    CELERY_DEFAULT_ROUTING_KEY = 'default'
 
 
 class Dev(Base):

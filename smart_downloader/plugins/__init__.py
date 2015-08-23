@@ -7,10 +7,10 @@ class ProviderClass(object):
     def match_pattern(self, file_url):
         raise NotImplementedError()
 
-    def find_more_links(self):
+    def find_more_links(self, data=None):
         pass
 
-    def download(self):
+    def download(self, url=None, output=None):
         raise NotImplementedError()
 
     def total_bytes(self):

@@ -1,15 +1,18 @@
 from __future__ import absolute_import
-from home.celery import app
-from smart_downloader.models import File, Provider
+from celery import task
 
 
-@app.task
-def download(file_id):
-    f = File.objects.get(pk=file_id)
+@task
+def download(url=None, name=None, provider=None):
+    from smart_downloader.models import File
+    f, _ = File.objects.get_or_create(
+        file_url=url, title=name, provider=provider)
     f.download()
+    return 'Done!'
 
 
-@app.task
-def find_more_links(provider_id):
+@task
+def find_more_links(provider_id=None):
+    from smart_downloader.models import Provider
     f = Provider.objects.get(pk=provider_id)
-    f.find_more_links()
+    return 'Added %s files' % f.find_more_links()
