@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from games.views import RandomDirectoryCleanerView, LeagueView
 from home.views import HomeView
 from say.views import SayView
+from smart_downloader.views import SmartDownloaderView
 from video_downloader.views import VideoDownloaderView
 
 from transmission.views import TransmissionView
@@ -19,10 +20,8 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     url(r'^say/', SayView.as_view(), name='say'),
-    url(r'^transmission/', login_required(
-        TransmissionView.as_view()), name='transmission'),
     url(r'^downloader/', login_required(
-        VideoDownloaderView.as_view()), name='downloader'),
+        SmartDownloaderView.as_view()), name='smart-downloader'),
     url(r'^random_directory/', login_required(
         RandomDirectoryCleanerView.as_view()), name='random-directory'),
     url(r'^video_league/', login_required(

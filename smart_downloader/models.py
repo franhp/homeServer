@@ -1,20 +1,16 @@
 import importlib
+
 from django.conf import settings
 
 from django.db import models
+from djcelery.models import TaskMeta
 
 from tasks import download
 
 import plugins
 
 
-
-
 class ProviderNotFoundError(Exception):
-    pass
-
-
-class AlreadyDownloadedError(Exception):
     pass
 
 
@@ -28,17 +24,13 @@ class File(models.Model):
     file_url = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
     provider = models.ForeignKey(
-        'smart_downloader.Provider', null=True, blank=True)
-
-    total_bytes = models.IntegerField(null=True, blank=True)
-    downloaded_bytes = models.IntegerField(null=True, blank=True)
+        'smart_downloader.Provider', null=True, blank=True,
+        related_name='provider')
+    task = models.ForeignKey(
+        TaskMeta, related_name='file_task', null=True, blank=True)
 
     def __unicode__(self):
         return self.title
-
-    def clean(self):
-        if File.objects.filter(file_url=self.file_url).exists():
-            raise AlreadyDownloadedError()
 
     def download(self):
         if self.provider and self.provider.provider_class:
@@ -57,7 +49,15 @@ class File(models.Model):
 
     @property
     def percentage(self):
-        return '%s%%' % (self.downloaded_bytes / (self.total_bytes * 100))
+        return (self.downloaded_bytes * 100) / float(self.total_bytes)
+
+    @property
+    def total_bytes(self):
+        return self.task.result.get('total')
+
+    @property
+    def downloaded_bytes(self):
+        return self.task.result.get('current')
 
 
 class Provider(models.Model):

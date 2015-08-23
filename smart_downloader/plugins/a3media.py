@@ -38,9 +38,3 @@ class A3Media(ProviderClass):
 
     def match_pattern(self, file_url):
         return file_url.startswith('http://www.atresplayer.com/')
-
-    def total_bytes(self):
-        return current_task.get()
-
-    def downloaded_bytes(self):
-        return current_task.get()

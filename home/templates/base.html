@@ -26,10 +26,7 @@
         <ul class="nav navbar-nav">
             <li><a href="{% url 'say' %}" class="">say</a></li>
             {% if user.is_authenticated %}
-                <li><a href="{% url 'transmission' %}" class="">transmission</a></li>
-            {% endif %}
-            {% if user.is_authenticated %}
-                <li><a href="{% url 'downloader' %}" class="">video_downloader</a></li>
+                <li><a href="{% url 'smart-downloader' %}" class="">smart_downloader</a></li>
             {% endif %}
             {% if user.is_authenticated %}
                 <li><a href="{% url 'random-directory' %}" class="">random_directory</a></li>

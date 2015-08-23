@@ -5,9 +5,15 @@ import os
 
 class ProviderClass(object):
     def match_pattern(self, file_url):
+        """
+        Returns True if the provider can download from that URL
+        """
         raise NotImplementedError()
 
     def find_more_links(self, data=None):
+        """
+        Returns a list of tuples (File easy name, File URL)
+        """
         pass
 
     def download(self, url=None, output=None):
