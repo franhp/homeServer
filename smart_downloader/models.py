@@ -53,7 +53,7 @@ class File(models.Model):
 
     def download(self):
         provider, output_dir = self.find_suitable_provider()
-        provider.download(url=self.file_url, output=output_dir)
+        return provider.download(url=self.file_url, output=output_dir)
 
     @property
     def percentage(self):
@@ -61,11 +61,13 @@ class File(models.Model):
 
     @property
     def total_bytes(self):
-        return self.task.result.get('total')
+        provider, _ = self.find_suitable_provider()
+        return provider.total_bytes(task=self.task)
 
     @property
     def downloaded_bytes(self):
-        return self.task.result.get('current')
+        provider, _ = self.find_suitable_provider()
+        return provider.downloaded_bytes(task=self.task)
 
 
 class Provider(models.Model):

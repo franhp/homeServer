@@ -45,3 +45,9 @@ class A3Media(ProviderClass):
     def find_title(self, url=None):
         pq = PyQuery(url=url)
         return pq('title').text().replace(u'Volver a ver vídeos de', '')
+
+    def downloaded_bytes(self, task=None):
+        return task.result.get('current')
+
+    def total_bytes(self, task=None):
+        return task.result.get('total')

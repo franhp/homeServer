@@ -23,7 +23,7 @@
                                 {% include 'progress-bar-rules.html' %}
                             </div>
                             <div class="col-sm-3">
-                                {% if file.total_bytes %}
+                                {% if file.downloaded_bytes %}
                                     <small>({{ file.downloaded_bytes|filesizeformat }}/{{ file.total_bytes|filesizeformat }})</small>
                                 {% endif %}
                             </div>

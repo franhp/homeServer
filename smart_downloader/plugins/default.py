@@ -29,3 +29,9 @@ class DefaultProvider(ProviderClass):
         }
         y = YoutubeDL(params=opts)
         y.download([url])
+
+    def downloaded_bytes(self, task=None):
+        return task.result.get('current')
+
+    def total_bytes(self, task=None):
+        return task.result.get('total')

@@ -22,10 +22,10 @@ class ProviderClass(object):
     def download(self, url=None, output=None):
         raise NotImplementedError()
 
-    def total_bytes(self):
+    def total_bytes(self, task=None):
         raise NotImplementedError()
 
-    def downloaded_bytes(self):
+    def downloaded_bytes(self, task=None):
         raise NotImplementedError()
 
 

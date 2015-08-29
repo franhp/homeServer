@@ -14,8 +14,7 @@ def download(url=None, name=None, provider=None):
     f.title = name if name else f.find_title()
     f.save()
 
-    f.download()
-    return 'Done!'
+    return f.download()
 
 
 @task
