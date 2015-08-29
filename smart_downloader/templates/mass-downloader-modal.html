@@ -12,14 +12,14 @@
                 <h2 class="modal-title">Paste your links here</h2>
             </div>
             <div class="modal-body">
-                <form method="POST" action="{% url 'smart-downloader' %}" >
+                <form id="add" method="POST" action="{% url 'smart-downloader' %}" >
                     {% csrf_token %}
-                    <textarea class="form-control" style="width:300px; height: 100px;" name="mass" placeholder="..."></textarea>
+                    <textarea class="form-control" rows="3" name="add" placeholder="..."></textarea>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Queue</button>
+                <button type="button" class="btn btn-primary" onclick="$('#add').submit();">Queue</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

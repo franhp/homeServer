@@ -10,10 +10,6 @@ from tasks import download
 import plugins
 
 
-class ProviderNotFoundError(Exception):
-    pass
-
-
 def load_plugin(full_name):
     kls = full_name.split('.')[-1:][0]
     module_path = '.'.join(full_name.split('.')[:-1])
@@ -25,7 +21,7 @@ class File(models.Model):
     title = models.CharField(max_length=255)
     provider = models.ForeignKey(
         'smart_downloader.Provider', null=True, blank=True,
-        related_name='provider')
+        related_name='provider_files')
     task = models.ForeignKey(
         TaskMeta, related_name='file_task', null=True, blank=True)
     deleted_on = models.DateTimeField(null=True, blank=True)
@@ -42,14 +38,18 @@ class File(models.Model):
                 provider = load_plugin(kls)()
                 if provider.match_pattern(self.file_url):
                     break
+                provider = None
             if not provider:
-                raise ProviderNotFoundError()
+                raise Exception('Could not find a suitable provider')
             output_dir = settings.DEFAULT_OUTPUT_DIR
         return provider, output_dir
 
     def find_title(self):
         provider, _ = self.find_suitable_provider()
-        return provider.find_title(url=self.file_url)
+        try:
+            return provider.find_title(url=self.file_url)
+        except Exception:
+            return self.file_url[-15:]
 
     def download(self):
         provider, output_dir = self.find_suitable_provider()

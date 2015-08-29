@@ -1,1 +1,38 @@
-{{ file.task.status|lower|capfirst }}
+{% if file.task.status == 'PROGRESS' %}
+    {# Abort #}
+    <form action="{% url 'smart-downloader' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="abort" value="{{ file.id }}">
+        <button type="submit" class="btn btn-default btn-sm">Abort</button>
+    </form>
+
+
+{% elif file.task.status == 'SUCCESS' %}
+    {# Archive #}
+    <form action="{% url 'smart-downloader' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="archive" value="{{ file.id }}">
+        <button type="submit" class="btn btn-default btn-sm">Archive</button>
+    </form>
+
+{% elif file.task.status == 'FAILURE' or file.task.status == 'ABORTED' %}
+    {# Retry #}
+    <form id="retry_fail" action="{% url 'smart-downloader' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="retry" value="{{ file.id }}">
+    </form>
+
+    {# Archive #}
+    <form id="archive_fail" action="{% url 'smart-downloader' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="archive" value="{{ file.id }}">
+    </form>
+
+    <div class="btn-group">
+        <button type="submit" class="btn btn-default btn-sm" onclick="$('#retry_fail').submit();">Retry</button>
+        <button type="submit" class="btn btn-default btn-sm" onclick="$('#archive_fail').submit();">Archive</button>
+    </div>
+{% else %}
+    No Actions
+
+{% endif %}

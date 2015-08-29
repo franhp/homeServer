@@ -9,9 +9,23 @@
 </div>
 {% endblock %}
 
+{% block extra_head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function(){
+        jQuery('.panel').on('shown.bs.collapse', function(e){
+            jQuery.cookie('cookie_collapse', jQuery(e.target).attr('id'));
+        });
 
-{% block extra_js %}
-<script>
-    $('.collapse').collapse()
+        var lastCollapse = jQuery.cookie('cookie_collapse');
+
+        if (lastCollapse) {
+            var lastCollapse = '#' + lastCollapse
+            jQuery(lastCollapse).addClass('in');
+        } else {
+            jQuery('#collapseManual').addClass('in');
+        }
+    } );
 </script>
+
 {% endblock %}

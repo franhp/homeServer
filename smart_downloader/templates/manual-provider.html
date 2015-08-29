@@ -6,7 +6,7 @@
             </a>
         </h4>
     </div>
-    <div id="collapseManual" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingManual">
+    <div id="collapseManual" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingManual">
         <div class="panel-body">
             <div class="col-sm-11">
                 <table class="table table-striped">
@@ -23,7 +23,9 @@
                                 {% include 'progress-bar-rules.html' %}
                             </div>
                             <div class="col-sm-3">
-                                <small>({{ file.downloaded_bytes|filesizeformat }}/{{ file.total_bytes|filesizeformat }})</small>
+                                {% if file.total_bytes %}
+                                    <small>({{ file.downloaded_bytes|filesizeformat }}/{{ file.total_bytes|filesizeformat }})</small>
+                                {% endif %}
                             </div>
                         </td>
                         <td>{% include 'actions.html' %}</td>
