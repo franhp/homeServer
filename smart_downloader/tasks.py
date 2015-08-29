@@ -7,8 +7,10 @@ from djcelery.models import TaskMeta
 def download(url=None, name=None, provider=None):
     from smart_downloader.models import File
     current_taskmeta = TaskMeta.objects.get(task_id=current_task.request.id)
-    f, _ = File.objects.get_or_create(
-        file_url=url, title=name, provider=provider, task=current_taskmeta)
+    f = File.objects.get(file_url=url)
+    f.title = f.find_title()
+    f.task = current_taskmeta
+    f.save()
     f.download()
     return 'Done!'
 

@@ -1,0 +1,40 @@
+<div class="panel panel-default">
+    <div class="panel-heading" role="tab" id="headingManual">
+        <h4 class="panel-title">
+            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseManual" aria-expanded="true" aria-controls="collapseManual">
+                Manual
+            </a>
+        </h4>
+    </div>
+    <div id="collapseManual" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingManual">
+        <div class="panel-body">
+            <div class="col-sm-11">
+                <table class="table table-striped">
+                    <thead style="font-weight: bold;">
+                        <td class="col-sm-1">Title</td>
+                        <td class="col-sm-4">Progress</td>
+                        <td class="col-sm-1">Status</td>
+                    </thead>
+                {% for file in providerless %}
+                    <tr>
+                        <td>{{ file.title }}</td>
+                        <td>
+                            <div class="col-sm-9">
+                                {% include 'progress-bar-rules.html' %}
+                            </div>
+                            <div class="col-sm-3">
+                                <small>({{ file.downloaded_bytes|filesizeformat }}/{{ file.total_bytes|filesizeformat }})</small>
+                            </div>
+                        </td>
+                        <td>{% include 'actions.html' %}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+
+            </div>
+            <div class="col-sm-1">
+                {% include 'mass-downloader-modal.html' %}
+            </div>
+        </div>
+    </div>
+</div>

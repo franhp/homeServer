@@ -28,11 +28,12 @@ class File(models.Model):
         related_name='provider')
     task = models.ForeignKey(
         TaskMeta, related_name='file_task', null=True, blank=True)
+    deleted_on = models.DateTimeField(null=True, blank=True)
 
     def __unicode__(self):
         return self.title
 
-    def download(self):
+    def find_suitable_provider(self):
         if self.provider and self.provider.provider_class:
             provider = load_plugin(self.provider.provider_class)()
             output_dir = self.provider.output_dir
@@ -41,10 +42,17 @@ class File(models.Model):
                 provider = load_plugin(kls)()
                 if provider.match_pattern(self.file_url):
                     break
-                provider = None
             if not provider:
                 raise ProviderNotFoundError()
             output_dir = settings.DEFAULT_OUTPUT_DIR
+        return provider, output_dir
+
+    def find_title(self):
+        provider, _ = self.find_suitable_provider()
+        return provider.find_title(url=self.file_url)
+
+    def download(self):
+        provider, output_dir = self.find_suitable_provider()
         provider.download(url=self.file_url, output=output_dir)
 
     @property
@@ -80,6 +88,7 @@ class Provider(models.Model):
             name, link = result
             if not File.objects.filter(file_url=link).exists():
                 added += 1
+                File.objects.create(file_url=link, title=name, provider=self)
                 download.apply_async(kwargs={
                     'url': link,
                     'name': name,

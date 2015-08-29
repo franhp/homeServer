@@ -1,0 +1,36 @@
+{% for provider in providers %}
+    <div class="panel panel-default">
+        <div class="panel-heading" role="tab" id="heading{{ provider.provider_name|slugify }}">
+            <h4 class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{ provider.provider_name|slugify }}" aria-expanded="true" aria-controls="collapse{{ provider.provider_name|slugify }}">
+                    {{ provider.provider_name }}
+                </a>
+            </h4>
+        </div>
+        <div id="collapse{{ provider.provider_name|slugify }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{ provider.provider_name|slugify }}">
+            <div class="panel-body">
+                <table class="table table-striped">
+                    <thead style="font-weight: bold;">
+                        <td class="col-sm-1">Title</td>
+                        <td class="col-sm-4">Progress</td>
+                        <td class="col-sm-1">Status</td>
+                    </thead>
+                {% for file in provider.provider.all %}
+                    <tr>
+                        <td><small>{{ file.title }}</small></td>
+                        <td>
+                            <div class="col-sm-9">
+                                {% include 'progress-bar-rules.html' %}
+                            </div>
+                            <div class="col-sm-3">
+                                <small>({{ file.downloaded_bytes|filesizeformat }}/{{ file.total_bytes|filesizeformat }})</small>
+                            </div>
+                        </td>
+                        <td>{% include 'actions.html' %}</td>
+                    </tr>
+                {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+{% endfor %}

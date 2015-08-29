@@ -1,0 +1,15 @@
+<div class="progress">
+    <div class="progress-bar
+        {% if file.task.status == 'PROGRESS' %}
+            progress-bar-info progress-bar-striped active
+        {% elif file.task.status == 'FAILURE' %}
+            progress-bar-danger
+        {% elif file.task.status == 'SUCCESS' %}
+            progress-bar-success
+        {% else %}
+            progress-bar-warning
+        {% endif %}"
+         role="progressbar" aria-valuenow="{{ file.percentage|floatformat }}" aria-valuemin="0" aria-valuemax="100" style="min-width: 3em;width: {{ file.percentage|floatformat }}%;">
+        {{ file.percentage|floatformat }}%
+    </div>
+</div>

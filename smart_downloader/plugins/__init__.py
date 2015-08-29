@@ -16,6 +16,9 @@ class ProviderClass(object):
         """
         pass
 
+    def find_title(self, url=None):
+        raise NotImplementedError()
+
     def download(self, url=None, output=None):
         raise NotImplementedError()
 

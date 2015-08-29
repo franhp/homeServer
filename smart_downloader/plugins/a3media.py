@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-
 import os
 import requests
+from pyquery import PyQuery
 from celery import current_task
 from youtube_dl import YoutubeDL
 
@@ -38,3 +40,7 @@ class A3Media(ProviderClass):
 
     def match_pattern(self, file_url):
         return file_url.startswith('http://www.atresplayer.com/')
+
+    def find_title(self, url=None):
+        pq = PyQuery(url=url)
+        return pq('title').text().replace(u'Volver a ver vídeos de', '')
