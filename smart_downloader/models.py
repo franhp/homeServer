@@ -73,7 +73,7 @@ class Provider(models.Model):
     provider_url = models.URLField()
     output_dir = models.CharField(max_length=255)
 
-    PROVIDERS = [(x, x.split('.')[-1:][0]) for x in plugins.__all_plugins__]
+    PROVIDERS = [(x, x.split('.')[-1:][0]) for x in plugins.all_plugins]
     provider_class = models.CharField(choices=PROVIDERS, max_length=255)
 
     def __unicode__(self):

@@ -33,5 +33,8 @@ for (module_loader, name, ispkg) in pkgutil.iter_modules(
         [os.path.dirname(__file__)]):
     importlib.import_module('smart_downloader.plugins.' + name, __package__)
 
-__all_plugins__ = ['.'.join([x.__module__, x.__name__]) for x in
-                   ProviderClass.__subclasses__()]
+all_plugins = []
+for kls in ProviderClass.__subclasses__():
+    if kls.__name__ != 'DefaultProvider':
+        all_plugins.append('.'.join([kls.__module__, kls.__name__]))
+all_plugins.append('smart_downloader.plugins.default.DefaultProvider')
