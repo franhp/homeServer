@@ -21,7 +21,7 @@ class ColouredTube(ProviderClass):
             title = element.xpath('a/@title')[0]
             url = self.encrypted_name + element.xpath('a/@href')[0]
             urls.append((title, url))
-        return url
+        return urls
 
     def find_title(self, url=None):
         pq = PyQuery(url=url)
