@@ -1,7 +1,6 @@
 import os
 
 from pyquery import PyQuery
-from celery import current_task
 from youtube_dl import YoutubeDL
 
 from smart_downloader.plugins import ProviderClass
@@ -22,12 +21,6 @@ class ChiaProvider(ProviderClass):
 
     def find_title(self, url=None):
         return url.split('/')[-2:-1]
-
-    def progress_hook(self, d):
-        current_task.update_state(
-            state='PROGRESS',
-            meta={'current': d['downloaded_bytes'], 'total': d['total_bytes']}
-        )
 
     def download(self, url=None, output=None):
         opts = {
