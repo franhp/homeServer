@@ -9,33 +9,41 @@
         </div>
         <div id="collapse{{ provider.provider_name|slugify }}" class="panel-collapse collapse" role="tabpanel" aria-labelledby="heading{{ provider.provider_name|slugify }}">
             <div class="panel-body">
-                <table class="table table-striped">
-                    <thead style="font-weight: bold;">
-                        <td class="col-sm-1">Title</td>
-                        <td class="col-sm-4">Progress</td>
-                        <td class="col-sm-1">Status</td>
-                    </thead>
-                {% for file in provider.provider_files.all %}
-                    {% if not file.deleted_on %}
-                    <tr>
-                            <td><small>{{ file.title }}</small></td>
-                            <td>
-                                <div class="col-sm-10">
-                                    {% include 'progress-bar-rules.html' %}
-                                </div>
-                                <div class="col-sm-2">
-                                    {% if file.total_bytes %}
-                                        <small>({{ file.downloaded_bytes|filesizeformat }}/{{ file.total_bytes|filesizeformat }})</small>
-                                    {% else %}
-                                        {# TODO display something for already downloaded #}
-                                    {% endif %}
-                                </div>
-                            </td>
-                            <td>{% include 'actions.html' %}</td>
-                        </tr>
-                    {% endif %}
-                {% endfor %}
-                </table>
+                <div class="col-sm-11">
+                    <table class="table table-striped">
+                        <thead style="font-weight: bold;">
+                            <td class="col-sm-1">Title</td>
+                            <td class="col-sm-4">Progress</td>
+                            <td class="col-sm-1">Status</td>
+                        </thead>
+                    {% for file in provider.provider_files.all %}
+                        {% if not file.deleted_on %}
+                        <tr>
+                                <td><small>{{ file.title }}</small></td>
+                                <td>
+                                    <div class="col-sm-10">
+                                        {% include 'progress-bar-rules.html' %}
+                                    </div>
+                                    <div class="col-sm-2">
+                                        {% if file.total_bytes %}
+                                            <small>({{ file.downloaded_bytes|filesizeformat }}/{{ file.total_bytes|filesizeformat }})</small>
+                                        {% else %}
+                                            {# TODO display something for already downloaded #}
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>{% include 'actions.html' %}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </table>
+                </div>
+                <div class="col-sm-1">
+                    <form method="post" action="{% url 'smart-downloader' %}">
+                        <input type="hidden" name="trigger_find_more_links" value="{{ provider.id }}">
+                        <button type="submit"><span class="glyphicon glyphicon-refresh"></span></button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

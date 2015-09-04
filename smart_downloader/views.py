@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponseRedirect
 from django.views.generic.base import TemplateView
-from tasks import download
+from tasks import download, find_more_links
 
 from smart_downloader.models import Provider, File
 
@@ -23,12 +23,18 @@ class SmartDownloaderView(TemplateView):
         abort = request.POST.get('abort')
         archive = request.POST.get('archive')
         add = request.POST.get('add')
+        trigger = request.POST.get('trigger_find_more_links')
 
         if add:
             for link in add.split('\n'):
                 download.apply_async(kwargs={
                     'url': link
                 })
+
+        elif trigger:
+            find_more_links.apply_async(kwargs={
+                'provider_id': trigger
+            })
         else:
             obj = File.objects.get(id=retry or abort or archive)
 
