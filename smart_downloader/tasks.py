@@ -22,3 +22,9 @@ def find_more_links(provider_id=None):
     from smart_downloader.models import Provider
     f = Provider.objects.get(pk=provider_id)
     return 'Added %s files' % f.find_more_links()
+
+
+@task
+def update_transmission():
+    from smart_downloader.plugins.transmission import TransmissionProvider
+    TransmissionProvider.update_fields()

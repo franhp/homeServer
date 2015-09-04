@@ -19,6 +19,7 @@ class TransmissionProvider(ProviderClass):
         return obj._fields['hashString'].value
 
     def update_fields(self, task):
+        # TODO monitor all torrents instead of just the task one
         from smart_downloader.models import File
         obj = File.objects.filter(task__task_id=task.task_id)[0]
         for torrent in self.tc.get_torrents():
@@ -41,7 +42,6 @@ class TransmissionProvider(ProviderClass):
         task.save()
 
     def downloaded_bytes(self, task=None):
-        self.update_fields(task)
         return task.meta.get('current')
 
     def total_bytes(self, task=None):
