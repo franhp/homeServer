@@ -40,8 +40,9 @@
                 </div>
                 <div class="col-sm-1">
                     <form method="post" action="{% url 'smart-downloader' %}">
+                        {% csrf_token %}
                         <input type="hidden" name="trigger_find_more_links" value="{{ provider.id }}">
-                        <button type="submit"><span class="glyphicon glyphicon-refresh"></span></button>
+                        <button class="btn btn-primary btn-lg" type="submit"><span class="glyphicon glyphicon-refresh"></span></button>
                     </form>
                 </div>
             </div>
