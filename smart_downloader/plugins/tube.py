@@ -1,9 +1,11 @@
-from pyquery import PyQuery
-from smart_downloader.plugins import ProviderClass
-from celery import current_task
-from youtube_dl import YoutubeDL
 import os
 from base64 import b64decode
+
+from pyquery import PyQuery
+from youtube_dl import YoutubeDL
+
+from smart_downloader.plugins import ProviderClass
+
 
 class ColouredTube(ProviderClass):
     encrypted_name = b64decode('aHR0cDovL3JlZHR1YmUuY29t')
