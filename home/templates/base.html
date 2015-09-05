@@ -28,12 +28,18 @@
             {% if user.is_authenticated %}
                 <li><a href="{% url 'smart-downloader' %}" class="">smart_downloader</a></li>
             {% endif %}
-            {% if user.is_authenticated %}
-                <li><a href="{% url 'random-directory' %}" class="">random_directory</a></li>
-            {% endif %}
-            {% if user.is_authenticated %}
-                <li><a href="{% url 'league' %}" class="">league</a></li>
-            {% endif %}
+
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">games <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'random-directory' %}" class="">random_directory</a></li>
+                    {% endif %}
+                    {% if user.is_authenticated %}
+                        <li><a href="{% url 'league' %}" class="">league</a></li>
+                    {% endif %}
+                </ul>
+            </li>
             {% if user.is_superuser %}
                 <li><a href="/admin" class="">admin</a></li>
             {% endif %}
