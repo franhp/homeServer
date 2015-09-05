@@ -27,4 +27,5 @@ def find_more_links(provider_id=None):
 @task
 def update_transmission():
     from smart_downloader.plugins.transmission import TransmissionProvider
-    TransmissionProvider.update_fields()
+    tc = TransmissionProvider()
+    return tc.update_fields()
