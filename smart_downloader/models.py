@@ -17,7 +17,7 @@ def load_plugin(full_name):
 
 
 class File(models.Model):
-    file_url = models.CharField(max_length=255)
+    file_url = models.TextField()
     title = models.CharField(max_length=255)
     provider = models.ForeignKey(
         'smart_downloader.Provider', null=True, blank=True,
