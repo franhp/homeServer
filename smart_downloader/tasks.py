@@ -29,3 +29,8 @@ def update_transmission():
     from smart_downloader.plugins.transmission import TransmissionProvider
     tc = TransmissionProvider()
     return tc.update_fields()
+
+
+@task
+def cleanup_transmission_tasks():
+    TaskMeta.objects.filter(file_task__isnull=True).delete()
