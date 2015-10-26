@@ -13,8 +13,8 @@ class ChiaProvider(ProviderClass):
     def find_more_links(self, data=None):
         pq = PyQuery(url=data.provider_url)
         urls = []
-        for url in pq('.thumb')[:10]:
-            p = PyQuery(url=url.xpath('a/@href')[0])
+        for url in pq('.post')[:5]:
+            p = PyQuery(url=url.xpath('div/a/@href')[0])
             vid = p('#download')
             urls.append((vid.text(), vid.attr('href')))
         return urls
