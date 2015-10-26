@@ -25,6 +25,7 @@ class File(models.Model):
     task = models.ForeignKey(
         TaskMeta, related_name='file_task', null=True, blank=True)
     deleted_on = models.DateTimeField(null=True, blank=True)
+    created_on = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.title

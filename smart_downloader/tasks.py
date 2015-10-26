@@ -1,7 +1,7 @@
 from __future__ import absolute_import
 from celery import task, current_task
 from djcelery.models import TaskMeta
-
+from datetime import datetime, timedelta
 
 @task
 def download(url=None, name=None, provider=None):
@@ -34,3 +34,10 @@ def update_transmission():
 @task
 def cleanup_transmission_tasks():
     TaskMeta.objects.filter(file_task__isnull=True).delete()
+
+
+@task
+def cleanup_old_downloads():
+    from smart_downloader.models import File
+    last_week = datetime.now() - timedelta(days=7)
+    File.objects.filter(created_on__lt=last_week).delete()
