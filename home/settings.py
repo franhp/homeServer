@@ -107,6 +107,8 @@ class Base(Configuration):
     CELERY_TRACK_STARTED = True
     CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 
+    DEFAULT_PROXY = os.environ.get('DEFAULT_PROXY', '94.76.179.1:8080')
+
 
 class Dev(Base):
     DEBUG = True
