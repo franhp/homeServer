@@ -8,20 +8,29 @@ from smart_downloader.plugins import ProviderClass
 
 class TransmissionProvider(ProviderClass):
     def __init__(self):
-        self.tc = transmissionrpc.Client(
-            settings.TRANSMISSION_HOST, port=settings.TRANSMISSION_PORT)
+        try:
+            self.tc = transmissionrpc.Client(
+                settings.TRANSMISSION_HOST, port=settings.TRANSMISSION_PORT)
+        except transmissionrpc.TransmissionError:
+            print('Could not connect to Transmission')
 
     def match_pattern(self, file_url):
         return (file_url.endswith('.torrent')
                 or file_url.startswith('magnet:?'))
 
     def download(self, url=None, output=None):
+        if self.tc is None:
+            raise Exception('Could not connect to Transmission')
 
         obj = self.tc.add_torrent(url)
         return obj._fields['hashString'].value
 
     def update_fields(self):
         from smart_downloader.models import File
+
+        if self.tc is None:
+            print('Could not connect to Transmission')
+            return
 
         ids_to_ignore = []
         for torrent in self.tc.get_torrents():
