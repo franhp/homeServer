@@ -6,9 +6,7 @@ from games.views import RandomDirectoryCleanerView, LeagueView
 from home.views import HomeView
 from say.views import SayView
 from smart_downloader.views import SmartDownloaderView
-from video_downloader.views import VideoDownloaderView
 
-from transmission.views import TransmissionView
 
 admin.autodiscover()
 
