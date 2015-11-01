@@ -1,10 +1,10 @@
-from collections import Counter
 import shutil
 import os
 import random
 import re
 
 from django.db import models
+from django.db.models import Count
 
 
 class League(models.Model):
@@ -16,23 +16,10 @@ class League(models.Model):
     def __unicode__(self):
         return self.name
 
-    def common_words(self):
-        def is_too_common(word):
-            is_video_extension = word.upper() in ('MP4', 'AVI', 'FLV', 'THE')
-            is_too_short = len(word) <= 3
-            is_number = word.isdigit()
-            return is_video_extension or is_too_short or is_number
-
-        words = []
-        for video in self.list_videos(self.library_path):
-            for w in video.words:
-                if not is_too_common(w):
-                    words.append(w.lower())
-        return Counter(words)
-
-    def words_ranking(self):
-        return reversed(sorted(
-            self.common_words().most_common(10), key=lambda x: x[1]))
+    def ranking(self):
+        return VideoTag.objects.annotate(
+            num_videos=Count('videos')
+        ).order_by('-num_videos')[:10]
 
     def list_videos(self, videos_path, key=None):
         if videos_path == self.play_path:
@@ -57,7 +44,9 @@ class League(models.Model):
         return self.list_videos(videos_path, key=lambda x: x.votes)
 
     def gather_random_contestants(self, videos_path):
-        return random.sample(self.list_videos(videos_path), 2)
+        less_voted_first = self.list_videos(
+            videos_path, key=lambda x: x.times_voted)[:20]
+        return random.sample(less_voted_first, 2)
 
     def cleanup(self):
         for video in self.league.all():
@@ -92,6 +81,7 @@ class League(models.Model):
 
 class LeagueVideo(models.Model):
     votes = models.IntegerField(default=0)
+    times_voted = models.IntegerField(default=0)
     video_full_path = models.CharField(max_length=255)
     video_rel_path = models.CharField(max_length=255)
     league = models.ForeignKey(League, related_name='league')
@@ -101,22 +91,31 @@ class LeagueVideo(models.Model):
 
     @property
     def name(self):
-        return os.path.basename(self.video_full_path)
+        return os.path.splitext(os.path.basename(self.video_full_path))[0]
 
     @property
     def popularity(self):
-        score = 0
-        common_words = self.league.common_words()
-        for word in self.words:
-            for common_word in common_words.items():
-                if word == common_word[0]:
-                    score += common_word[1]
+        if not self.tags.exists():
+            self._auto_generate_tags()
 
+        score = self.votes
+        for tag in self.tags.all():
+            score += tag.score
         return score
 
-    @property
-    def words(self):
-        return re.findall(r'[a-zA-Z0-9]+', self.name)
+    def _auto_generate_tags(self):
+
+        def is_too_common(word_part):
+            is_video_extension = word_part.upper() in ('THE',)
+            is_too_short = len(word_part) <= 3
+            is_number = word_part.isdigit()
+            return is_video_extension or is_too_short or is_number
+
+        for word in re.findall(r'[a-zA-Z0-9]+', self.name):
+            if not is_too_common(word):
+                tag, _ = VideoTag.objects.get_or_create(name=word.lower())
+                tag.videos.add(self)
+                tag.save()
 
     @property
     def size(self):
@@ -130,10 +129,12 @@ class LeagueVideo(models.Model):
 
     def vote_down(self):
         self.votes -= 1
+        self.times_voted += 1
         self.save()
 
     def vote_up(self):
         self.votes += 1
+        self.times_voted += 1
         self.save()
 
     def delete_video(self):
@@ -147,3 +148,12 @@ class LeagueVideo(models.Model):
         )
         shutil.move(self.video_full_path, dest_filename)
         self.delete()
+
+
+class VideoTag(models.Model):
+    name = models.CharField(max_length=255, unique=True)
+    videos = models.ManyToManyField(LeagueVideo, related_name='tags')
+
+    @property
+    def score(self):
+        return self.videos.count()

@@ -7,3 +7,4 @@ git+git://github.com/rg3/youtube-dl.git
 git+git://github.com/jezdez/django-configurations.git
 django-celery==3.1.15
 MySQL-python==1.2.5
+django-dynamic-fixture==1.7.0
