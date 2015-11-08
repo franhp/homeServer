@@ -2,13 +2,21 @@ from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
 from django.contrib.auth.decorators import login_required
-from games.views import RandomDirectoryCleanerView, LeagueView
+from rest_framework.routers import DefaultRouter
+from games.views import (
+    RandomDirectoryCleanerView, LeagueView, SearchAndTagView, ShowVideoView,
+    TagView, VideoView)
 from home.views import HomeView
 from say.views import SayView
 from smart_downloader.views import SmartDownloaderView
 
 
 admin.autodiscover()
+
+router = DefaultRouter()
+router.register(r'video_tags', TagView)
+router.register(r'videos', VideoView)
+
 
 urlpatterns = patterns('',
     url(r'^$', HomeView.as_view(), name='index'),
@@ -24,4 +32,9 @@ urlpatterns = patterns('',
         RandomDirectoryCleanerView.as_view()), name='random-directory'),
     url(r'^video_league/', login_required(
         LeagueView.as_view()), name='league'),
+    url(r'^video_search/', login_required(
+        SearchAndTagView.as_view()), name='search-tag'),
+    url(r'^show_video/(?P<video_id>[0-9]+)/$', login_required(
+        ShowVideoView.as_view()), name='show-video'),
+    url(r'^', include(router.urls)),
 )

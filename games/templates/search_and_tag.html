@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Search for...">
+        <span class="input-group-btn">
+            <button class="btn btn-default" type="button" onclick="$('.form-control').val('');get_videos();">Clear</button>
+        </span>
+    </div>
+
+
+    <ul class="list-group">
+    </ul>
+
+{% endblock %}
+
+
+{% block extra_javascript %}
+<script>
+
+function getURLParameter(sParam) {
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) {
+            return sParameterName[1];
+        }
+    }
+}
+
+function process_video_data(video_data){
+    var video_elements = [];
+    video_data.forEach(function(video){
+        var video_element = ['<li class="list-group-item">',
+                    '<a href="../../show_video/'+ video.id +'">' + video.name + '</a>'
+        ];
+
+        $.each(video.tags, function(id, tag_name){
+            var badge = ['<span class="badge">',
+                '<a href="../../video_search/?search=' + tag_name + '" style="color: white;">' + tag_name + '</a>',
+                '</span>'
+            ];
+           video_element.push(badge.join('\n'));
+        });
+
+        video_element.push('</li>');
+
+        video_elements.push(video_element.join('\n'));
+    });
+
+    $('.list-group').html(video_elements.join('\n'))
+}
+
+function get_videos(search_string){
+    $('.list-group').html('<span class="glyphicon glyphicon-refresh"></span>');
+    $.ajax({
+        url: '../../videos/',
+        contentType: 'application/json',
+        type: 'GET',
+        dataType: 'json',
+        data: {
+            search: search_string
+        }
+    }).success(
+            function(videos){
+                process_video_data(videos)
+            }
+    ).error(
+            function(r){
+                console.log(r);
+                alert(r);
+            }
+    );
+}
+
+$(document).ready(function(){
+    var search_parameter = getURLParameter('search')
+    $('.form-control').val(search_parameter)
+    get_videos(search_parameter);
+});
+
+
+$('.form-control').on('keyup', function(event){
+    get_videos($(this).val());
+});
+
+</script>
+{% endblock %}

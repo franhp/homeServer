@@ -1,0 +1,7 @@
+{% if video.popularity >= 30 %}
+    <span class="badge" style="font-size: xx-large; background-color: darkred;">
+{% elif video.popularity > 15 and video.popularity < 30  %}
+    <span class="badge" style="font-size: large; background-color: orange;">
+{% else %}
+    <span class="badge">
+{% endif %}

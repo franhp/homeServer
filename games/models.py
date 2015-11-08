@@ -5,6 +5,8 @@ import re
 
 from django.db import models
 from django.db.models import Count
+from taggit.managers import TaggableManager
+from taggit.models import Tag
 
 
 class League(models.Model):
@@ -17,9 +19,9 @@ class League(models.Model):
         return self.name
 
     def ranking(self):
-        return VideoTag.objects.annotate(
-            num_videos=Count('videos')
-        ).order_by('-num_videos')[:10]
+        return Tag.objects.annotate(
+            num_videos=Count('taggit_taggeditem_items')
+        ).order_by('taggit_taggeditem_items')[:10]
 
     def list_videos(self, videos_path, key=None):
         if videos_path == self.play_path:
@@ -66,10 +68,12 @@ class League(models.Model):
                     rel_path = os.path.join(
                         os.path.relpath(root, self.library_path), name)
                     if not is_commonly_not_used(name):
-                        v, _ = LeagueVideo.objects.get_or_create(
+                        v, new = LeagueVideo.objects.get_or_create(
                             video_full_path=video_path,
                             video_rel_path=rel_path,
                             league=self)
+                        #if new:
+                        #    v.auto_generate_tags()
 
         update_video_objects(self.library_path)
         # TODO some day they may be separate
@@ -85,6 +89,8 @@ class LeagueVideo(models.Model):
     video_full_path = models.CharField(max_length=255)
     video_rel_path = models.CharField(max_length=255)
     league = models.ForeignKey(League, related_name='league')
+    tags = TaggableManager()
+    created_at = models.DateTimeField(auto_created=True)
 
     def __unicode__(self):
         return '(%s) %s' % (self.league, self.name)
@@ -95,15 +101,15 @@ class LeagueVideo(models.Model):
 
     @property
     def popularity(self):
-        if not self.tags.exists():
-            self._auto_generate_tags()
+        #if not self.tags.exists():
+        #    self.auto_generate_tags()
 
         score = self.votes
         for tag in self.tags.all():
-            score += tag.score
+            score += LeagueVideo.objects.filter(tags=tag).count()
         return score
 
-    def _auto_generate_tags(self):
+    def auto_generate_tags(self):
 
         def is_too_common(word_part):
             is_video_extension = word_part.upper() in ('THE',)
@@ -113,9 +119,8 @@ class LeagueVideo(models.Model):
 
         for word in re.findall(r'[a-zA-Z0-9]+', self.name):
             if not is_too_common(word):
-                tag, _ = VideoTag.objects.get_or_create(name=word.lower())
-                tag.videos.add(self)
-                tag.save()
+                self.tags.add(word.lower())
+                self.save()
 
     @property
     def size(self):
@@ -147,13 +152,7 @@ class LeagueVideo(models.Model):
             os.path.basename(self.video_full_path)
         )
         shutil.move(self.video_full_path, dest_filename)
-        self.delete()
+        self.video_full_path = dest_filename
+        self.save()
 
 
-class VideoTag(models.Model):
-    name = models.CharField(max_length=255, unique=True)
-    videos = models.ManyToManyField(LeagueVideo, related_name='tags')
-
-    @property
-    def score(self):
-        return self.videos.count()

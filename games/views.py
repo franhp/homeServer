@@ -1,23 +1,28 @@
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
+from rest_framework import serializers, viewsets
+from taggit.models import Tag
+
 from games.models import League, LeagueVideo
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponseRedirect
-
+from rest_framework import filters
+from taggit_serializer.serializers import (TagListSerializerField,
+                                           TaggitSerializer)
 
 class RandomDirectoryCleanerView(TemplateView):
     template_name = 'random_directory_cleaner.html'
-    
+
     def get(self, request, *args, **kwargs):
         try:
-            league = League.objects.get(name='RandomDirectory')
+            league = League.objects.get(name='VideoLeague')
             league.cleanup()
         except ObjectDoesNotExist:
             return render(request, self.template_name, {})
 
         return render(request, self.template_name, {
-            'ranking': league.words_ranking(),
+            'ranking': league.ranking(),
             'videos': league.list_videos_by_popularity(league.play_path),
             'total_size': league.total_size(league.play_path)
         })
@@ -74,3 +79,70 @@ class FilterGameView(TemplateView):
     pass
     # TODO IDEA: Tag all the videos, how much time you got?
     # go random playlist!
+
+
+class SearchAndTagView(TemplateView):
+    template_name = 'search_and_tag.html'
+
+    def get(self, request, *args, **kwargs):
+        # TODO avoid get?
+        return render(request, self.template_name, {})
+
+
+class ShowVideoView(TemplateView):
+    template_name = 'show_video.html'
+
+    def get(self, request, *args, **kwargs):
+        try:
+            video = LeagueVideo.objects.get(id=self.kwargs.pop('video_id'))
+        except ObjectDoesNotExist:
+            video = {}
+
+        return render(request, self.template_name, {
+            'video': video
+        })
+
+    def post(self, request, *args, **kwargs):
+        vote_up = request.POST.get('vote_up')
+        vote_down = request.POST.get('vote_down')
+        video_id = kwargs.pop('video_id')
+
+        vid = LeagueVideo.objects.get(id=video_id)
+        if vote_up:
+            vid.vote_up()
+        elif vote_down:
+            vid.vote_down()
+
+        return HttpResponseRedirect(reverse('show-video', args=(video_id,)))
+
+
+
+class VideoSerializer(TaggitSerializer, serializers.ModelSerializer):
+    name = serializers.CharField()
+    league = serializers.CharField(source='league.name')
+    tags = TagListSerializerField()
+
+    class Meta:
+        model = LeagueVideo
+
+
+class VideoView(viewsets.ModelViewSet):
+    queryset = LeagueVideo.objects.all()
+    serializer_class = VideoSerializer
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter, )
+    search_fields = ('tags__name', )
+    ordering_fields = '__all__'
+    ordering = '-created_at'
+
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+
+
+class TagView(viewsets.ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
+    filter_backends = (filters.SearchFilter,)
+    search_fields = ('name', )
+

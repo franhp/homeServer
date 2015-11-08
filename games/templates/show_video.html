@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.17.0/mediaelement-and-player.min.js"
+        xmlns="http://www.w3.org/1999/html"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.17.0/mediaelementplayer.css" />
+<script src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
+{% endblock %}
+
+{% block content %}
+
+    {% if video %}
+        <div class="row">
+            <div class="col-md-4">
+                {% if video.get_previous_by_created_at %}
+                    <a class="btn btn-info" href="{% url 'show-video' video.get_previous_by_created_at.id %}"><i class="glyphicon glyphicon-menu-left"></i></a>
+                {% endif %}
+            </div>
+            <div class="col-md-4 text-center">
+                <a class="btn btn-info" href="{% url 'search-tag' %}"><i class="glyphicon glyphicon-menu-up"></i></a>
+            </div>
+            <div class="col-md-4 text-right">
+                {% if video.get_next_by_created_at %}
+                    <a class="btn btn-info" href="{% url 'show-video' video.get_next_by_created_at.id %}"><i class="glyphicon glyphicon-menu-right"></i></a>
+                {% endif %}
+            </div>
+        </div>
+        <hr />
+        <h3>{% include 'popularity.html' %}{{ video.popularity }}</span>
+            <small>(
+            {{ video.votes }} votes
+            <form action="{% url 'show-video' video.id %}" method="post" style="display: inline-block;">
+                {% csrf_token %}
+                <input type="hidden" name="vote_up" value="true">
+                <button type="submit" class="btn btn-sm btn-success"><i class="glyphicon glyphicon-chevron-up"></i></button>
+            </form>
+            <form class="form-inline" action="{% url 'show-video' video.id %}" method="post" style="display: inline-block;">
+                {% csrf_token %}
+                <input type="hidden" name="vote_down" value="true">
+                <button class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-chevron-down"></i></button>
+            </form>
+            )</small> {{ video.name }}</h3>
+        <div class="col-md-8">
+
+            <video width="700" height="500" controls="controls" preload="none" >
+                <source src="{{ MEDIA_URL }}{{ video.video_rel_path }}" type="video/{{ video.video_rel_path|slice:"-3:" }}" />
+            </video>
+        </div>
+        <div class="col-md-4">
+            <ul id="tags">
+            {% for tag in video.tags.all %}
+                <li>{{ tag.name }} <button class="btn btn-xs btn-danger delete-tag"><i class="glyphicon glyphicon-remove"></i></button></li>
+            {% endfor %}
+            </ul>
+
+            <input type="text" class="form-control typeahead" placeholder="Add tags...">
+
+        </div>
+    {% else %}
+        No Video Found!
+    {% endif %}
+{% endblock %}
+
+{% block extra_javascript %}
+<script>
+$('video,audio').mediaelementplayer({
+    // remove or reorder to change plugin priority
+    plugins: ['flash','silverlight'],
+    // specify to force MediaElement to use a particular video or audio type
+    type: '',
+    // path to Flash and Silverlight plugins
+    pluginPath: '{{ STATIC_URL }}/plugins/',
+    // name of flash file
+    flashName: 'flashmediaelement.swf',
+    // name of silverlight file
+    silverlightName: 'silverlightmediaelement.xap',
+    // rate in milliseconds for Flash and Silverlight to fire the timeupdate event
+    // larger number is less accurate, but less strain on plugin->JavaScript bridge
+    timerRate: 250
+});
+
+var tags = new Bloodhound({
+    datumTokenizer: Bloodhound.tokenizers.obj.whitespace('name'),
+    queryTokenizer: Bloodhound.tokenizers.whitespace,
+    remote: {
+        url: '../../video_tags/?search=%QUERY',
+        wildcard: '%QUERY'
+    }
+});
+
+var tag_names = [
+        {% for tag in video.tags.all %}
+            "{{ tag.name }}",
+        {% endfor %}
+]
+
+function mod_tag(tags) {
+    $.ajax({
+        url: '../../videos/{{ video.id }}/',
+        contentType: 'application/json',
+        type: 'PATCH',
+        dataType: 'json',
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        data: JSON.stringify({
+            id: {{ video.id }},
+            tags: tags
+        })
+    }).success(
+            function(r){
+                console.log(r)
+            }
+    ).error(
+            function(r){
+                console.log(r);
+                alert(r);
+            }
+    );
+
+}
+
+
+$('.delete-tag').on('click', function(){
+    var del_tag =  $(this).closest('li').text().replace(' ', '');
+    var li_element = $(this).parent();
+    tag_names.splice(tag_names.indexOf(del_tag), 1);
+    mod_tag(tag_names);
+    li_element.remove();
+
+});
+
+$('.typeahead').typeahead({
+    hint: true,
+    highlight: true,
+}, {
+    name: 'name',
+    display: 'name',
+    source: tags
+}).keypress(function(event){
+    if (event.which == 13) {
+        event.preventDefault();
+
+        tag_names.push($(this).val());
+        mod_tag(tag_names);
+
+        $('#tags').append('<li>'+ $(this).val() + ' <button class="btn btn-xs btn-danger delete-tag"><i class="glyphicon glyphicon-remove"></i></button></li>');
+        $('.typeahead').val('');
+
+    }
+});
+
+
+</script>
+{% endblock %}

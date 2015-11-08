@@ -26,6 +26,9 @@ class Base(Configuration):
         'smart_downloader',
         'say',
         'djcelery',
+        'rest_framework',
+        'taggit',
+        'taggit_serializer',
     )
 
     MIDDLEWARE_CLASSES = (
@@ -108,6 +111,8 @@ class Base(Configuration):
     CELERYBEAT_SCHEDULER = 'djcelery.schedulers.DatabaseScheduler'
 
     DEFAULT_PROXY = os.environ.get('DEFAULT_PROXY', '94.76.179.1:8080')
+
+    TAGGIT_CASE_INSENSITIVE = True
 
 
 class Dev(Base):
