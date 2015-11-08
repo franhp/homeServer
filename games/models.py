@@ -1,7 +1,8 @@
-import shutil
 import os
 import random
 import re
+import shutil
+from datetime import datetime
 
 from django.db import models
 from django.db.models import Count
@@ -72,12 +73,11 @@ class League(models.Model):
                             video_full_path=video_path,
                             video_rel_path=rel_path,
                             league=self)
-                        #if new:
+                        # if new:
                         #    v.auto_generate_tags()
 
         update_video_objects(self.library_path)
-        # TODO some day they may be separate
-        # update_video_objects(self.play_path)
+        update_video_objects(self.play_path)
 
     def total_size(self, videos_path):
         return sum(x.size for x in self.list_videos(videos_path))
@@ -90,7 +90,7 @@ class LeagueVideo(models.Model):
     video_rel_path = models.CharField(max_length=255)
     league = models.ForeignKey(League, related_name='league')
     tags = TaggableManager()
-    created_at = models.DateTimeField(auto_created=True)
+    created_at = models.DateTimeField(auto_created=True, default=datetime.now)
 
     def __unicode__(self):
         return '(%s) %s' % (self.league, self.name)
@@ -101,7 +101,7 @@ class LeagueVideo(models.Model):
 
     @property
     def popularity(self):
-        #if not self.tags.exists():
+        # if not self.tags.exists():
         #    self.auto_generate_tags()
 
         score = self.votes
@@ -154,5 +154,3 @@ class LeagueVideo(models.Model):
         shutil.move(self.video_full_path, dest_filename)
         self.video_full_path = dest_filename
         self.save()
-
-
