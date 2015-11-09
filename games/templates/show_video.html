@@ -40,24 +40,30 @@
                 <button class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-chevron-down"></i></button>
             </form>
             )</small> {{ video.name }}</h3>
-        <div class="col-md-8">
 
-            <video width="700" height="500" controls="controls" preload="none" >
-                <source src="{{ MEDIA_URL }}{{ video.video_rel_path }}" type="video/{{ video.video_rel_path|slice:"-3:" }}" />
-            </video>
-        </div>
-        <div class="col-md-4">
-            <ul id="tags">
-            {% for tag in video.tags.all %}
-                <li>{{ tag.name }} <button class="btn btn-xs btn-danger delete-tag"><i class="glyphicon glyphicon-remove"></i></button></li>
-            {% endfor %}
-            </ul>
+        {% if not is_random %}
+            <div class="col-md-8">
 
-            <input type="text" class="form-control typeahead" placeholder="Add tags...">
+                <video width="700" height="500" controls="controls" preload="none" >
+                    <source src="{{ MEDIA_URL }}{{ video.video_rel_path }}" type="video/{{ video.video_rel_path|slice:"-3:" }}" />
+                </video>
+            </div>
+            <div class="col-md-4">
+                <ul id="tags">
+                {% for tag in video.tags.all %}
+                    <li>{{ tag.name }} <button class="btn btn-xs btn-danger delete-tag"><i class="glyphicon glyphicon-remove"></i></button></li>
+                {% endfor %}
+                </ul>
 
-        </div>
+                <input type="text" class="form-control typeahead" placeholder="Add tags...">
+
+            </div>
+        {% else %}
+            <div class="well"> Still in random directory!</div>
+        {% endif %}
     {% else %}
         No Video Found!
+        <a class="btn btn-info" href="{% url 'search-tag' %}"><i class="glyphicon glyphicon-menu-up"></i></a>
     {% endif %}
 {% endblock %}
 

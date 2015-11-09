@@ -30,6 +30,14 @@ function getURLParameter(sParam) {
     }
 }
 
+function slug (value) {
+  // 1) convert to lowercase
+  // 2) remove dashes and pluses
+  // 3) replace spaces with dashes
+  // 4) remove everything but alphanumeric characters and dashes
+  return value.toLowerCase().replace(/-+/g, '').replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+}
+
 function process_video_data(video_data){
     var video_elements = [];
     video_data.forEach(function(video){
@@ -39,7 +47,7 @@ function process_video_data(video_data){
 
         $.each(video.tags, function(id, tag_name){
             var badge = ['<span class="badge">',
-                '<a href="../../video_search/?search=' + tag_name + '" style="color: white;">' + tag_name + '</a>',
+                '<a href="../../video_search/?search=' + slug(tag_name) + '" style="color: white;">' + tag_name + '</a>',
                 '</span>'
             ];
            video_element.push(badge.join('\n'));

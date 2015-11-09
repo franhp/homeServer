@@ -94,6 +94,8 @@ class ShowVideoView(TemplateView):
             video = {}
 
         return render(request, self.template_name, {
+            'is_random': video.video_full_path.startswith(
+                video.league.play_path),
             'video': video
         })
 
@@ -134,7 +136,7 @@ class VideoView(viewsets.ModelViewSet):
     queryset = LeagueVideo.objects.all()
     serializer_class = VideoSerializer
     filter_backends = (filters.SearchFilter, filters.OrderingFilter, )
-    search_fields = ('tags__name', )
+    search_fields = ('tags__slug', 'tags__name', )
     ordering_fields = '__all__'
     ordering = '-created_at'
 
