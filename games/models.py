@@ -109,6 +109,13 @@ class LeagueVideo(models.Model):
             score += LeagueVideo.objects.filter(tags=tag).count()
         return score
 
+    @property
+    def guessed_popularity(self):
+        score = 0
+        for word in re.findall(r'[a-zA-Z0-9]+', self.name):
+            score += LeagueVideo.objects.filter(tags__name=word.lower()).count()
+        return score
+
     def auto_generate_tags(self):
 
         def is_too_common(word_part):

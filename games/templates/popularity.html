@@ -1,7 +1,19 @@
-{% if video.popularity >= 30 %}
-    <span class="badge" style="font-size: xx-large; background-color: darkred;">
-{% elif video.popularity > 15 and video.popularity < 30  %}
-    <span class="badge" style="font-size: large; background-color: orange;">
+{% if guessed_popularity %}
+    {% if video.guessed_popularity >= 30 %}
+        <span class="badge" style="font-size: xx-large; background-color: darkred;">
+    {% elif video.guessed_popularity > 15 and video.guessed_popularity < 30  %}
+        <span class="badge" style="font-size: large; background-color: orange;">
+    {% else %}
+        <span class="badge">
+    {% endif %}
+
 {% else %}
-    <span class="badge">
+
+    {% if video.popularity >= 30 %}
+        <span class="badge" style="font-size: xx-large; background-color: darkred;">
+    {% elif video.popularity > 15 and video.popularity < 30  %}
+        <span class="badge" style="font-size: large; background-color: orange;">
+    {% else %}
+        <span class="badge">
+    {% endif %}
 {% endif %}
