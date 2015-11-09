@@ -90,12 +90,14 @@ class ShowVideoView(TemplateView):
     def get(self, request, *args, **kwargs):
         try:
             video = LeagueVideo.objects.get(id=self.kwargs.pop('video_id'))
+            is_random = video.video_full_path.startswith(
+                video.league.play_path)
         except ObjectDoesNotExist:
             video = {}
+            is_random = False
 
         return render(request, self.template_name, {
-            'is_random': video.video_full_path.startswith(
-                video.league.play_path),
+            'is_random': is_random,
             'video': video
         })
 
