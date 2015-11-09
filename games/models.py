@@ -22,7 +22,7 @@ class League(models.Model):
     def ranking(self):
         return Tag.objects.annotate(
             num_videos=Count('taggit_taggeditem_items')
-        ).order_by('taggit_taggeditem_items')[:10]
+        ).order_by('-num_videos')
 
     def list_videos(self, videos_path, key=None):
         if videos_path == self.play_path:

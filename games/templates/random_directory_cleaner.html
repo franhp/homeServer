@@ -8,11 +8,6 @@
 
 {% block content %}
 
-
-    {% if not ranking %}
-    Must Create League with name `VideoLeague`
-    {% endif %}
-
     {% if videos %}
 
         <div class="col-sm-12 col-md-9">
@@ -69,27 +64,9 @@
             </table>
         </div>
 
-        <div class="col-md-3 col-sm-12 pull-right">
-            <h2>Ranking</h2>
-            <ul class="list-group">
-            {% for word in ranking %}
-                <li class="list-group-item">{{ word.name }} <span class="badge">{{ word.score }} times</span> </li>
-            {% endfor %}
-            </ul>
-        </div>
-
 
     {% else %}
         <div class="alert alert-info"> <h4>Yay! No videos left!</h4></div>
-
-
-        <h2>Ranking</h2>
-        <ol>
-        {% for word in ranking %}
-            <li>{{ word.name }} <span class="badge">{{ word.score }} times</span> </li>
-        {% endfor %}
-        </ol>
-
     {% endif %}
 
 

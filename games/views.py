@@ -22,7 +22,6 @@ class RandomDirectoryCleanerView(TemplateView):
             return render(request, self.template_name, {})
 
         return render(request, self.template_name, {
-            'ranking': league.ranking(),
             'videos': league.list_videos_by_popularity(league.play_path),
             'total_size': league.total_size(league.play_path)
         })
@@ -84,10 +83,6 @@ class FilterGameView(TemplateView):
 class SearchAndTagView(TemplateView):
     template_name = 'search_and_tag.html'
 
-    def get(self, request, *args, **kwargs):
-        # TODO avoid get?
-        return render(request, self.template_name, {})
-
 
 class ShowVideoView(TemplateView):
     template_name = 'show_video.html'
@@ -115,6 +110,15 @@ class ShowVideoView(TemplateView):
 
         return HttpResponseRedirect(reverse('show-video', args=(video_id,)))
 
+
+class RankingView(TemplateView):
+    template_name = 'ranking.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(RankingView, self).get_context_data(**kwargs)
+        league = League.objects.get(name='VideoLeague')
+        context['ranking'] = league.ranking()
+        return context
 
 
 class VideoSerializer(TaggitSerializer, serializers.ModelSerializer):
