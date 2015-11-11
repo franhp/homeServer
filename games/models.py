@@ -160,4 +160,5 @@ class LeagueVideo(models.Model):
         )
         shutil.move(self.video_full_path, dest_filename)
         self.video_full_path = dest_filename
+        self.video_rel_path = os.path.basename(dest_filename)
         self.save()
