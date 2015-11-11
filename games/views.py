@@ -84,7 +84,7 @@ class SearchAndTagView(TemplateView):
     template_name = 'search_and_tag.html'
 
     def get(self, request, *args, **kwargs):
-        League.objects.get('VideoLeague').cleanup()
+        League.objects.get(name='VideoLeague').cleanup()
         return render(request, self.template_name, {})
 
 
