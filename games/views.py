@@ -83,6 +83,10 @@ class FilterGameView(TemplateView):
 class SearchAndTagView(TemplateView):
     template_name = 'search_and_tag.html'
 
+    def get(self, request, *args, **kwargs):
+        League.objects.get('VideoLeague').cleanup()
+        return render(request, self.template_name, {})
+
 
 class ShowVideoView(TemplateView):
     template_name = 'show_video.html'
