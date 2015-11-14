@@ -93,7 +93,7 @@ class LeagueVideo(models.Model):
     created_at = models.DateTimeField(auto_created=True, default=datetime.now)
 
     def __unicode__(self):
-        return '(%s) %s' % (self.league, self.name)
+        return '(%s) %s [%s]' % (self.league, self.name, self.tags)
 
     @property
     def name(self):
@@ -159,6 +159,4 @@ class LeagueVideo(models.Model):
             os.path.basename(self.video_full_path)
         )
         shutil.move(self.video_full_path, dest_filename)
-        self.video_full_path = dest_filename
-        self.video_rel_path = os.path.basename(dest_filename)
-        self.save()
+        self.delete()
