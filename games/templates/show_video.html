@@ -44,7 +44,7 @@
         {% if not is_random %}
             <div class="col-md-8">
 
-                <video width="700" height="500" controls="controls" preload="none" poster="{{ STATIC_URL }}/thumbnails/{{ video.poster }}">
+                <video width="700" height="500" controls="controls" preload="none" poster="{{ STATIC_URL }}thumbnails/{{ video.poster }}">
                     <source src="{{ MEDIA_URL }}{{ video.video_rel_path }}" type="video/{{ video.video_rel_path|slice:"-3:" }}" />
                 </video>
             </div>

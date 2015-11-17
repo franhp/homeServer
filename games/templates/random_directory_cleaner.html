@@ -27,7 +27,7 @@
                 </form>
             </h3>
 
-            <video width="700" height="500" controls="controls" preload="none" >
+            <video width="700" height="500" controls="controls" preload="none" poster="{{ STATIC_URL }}thumbnails/{{ videos.0.poster }}" >
                 <source src="{{ MEDIA_URL }}{{ videos.0.video_rel_path }}" type="video/{{ videos.0.video_rel_path|slice:"-3:" }}" />
             </video>
         </div>
@@ -43,7 +43,7 @@
                 <tr>
                     <td>
                         {% include 'popularity.html' %}
-                        {{ video.guesseded_popularity }}</span></td>
+                        {{ video.guessed_popularity }}</span></td>
                     <td>{{ video.name|slice:":25" }}</td>
                     <td>
                         <form method="post" action="{% url 'random-directory' %}">
