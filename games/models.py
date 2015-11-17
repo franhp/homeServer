@@ -124,7 +124,7 @@ class LeagueVideo(models.Model):
     @property
     def duration(self):
         vs = VideoStream(self.video_full_path)
-        return timedelta(seconds=vs.duration)
+        return (datetime(1,1,1,0,0,0) + timedelta(seconds=vs.duration)).time()
 
     @property
     def poster(self):
