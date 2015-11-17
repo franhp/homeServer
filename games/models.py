@@ -45,6 +45,9 @@ class League(models.Model):
     def list_videos_by_popularity(self, videos_path):
         return self.list_videos(videos_path, key=lambda x: x.popularity)
 
+    def list_videos_by_guessed_popularity(self, videos_path):
+        return self.list_videos(videos_path, key=lambda x: x.guessed_popularity)
+
     def list_videos_by_votes(self, videos_path):
         return self.list_videos(videos_path, key=lambda x: x.votes)
 

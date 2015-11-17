@@ -22,7 +22,8 @@ class RandomDirectoryCleanerView(TemplateView):
             return render(request, self.template_name, {})
 
         return render(request, self.template_name, {
-            'videos': league.list_videos_by_popularity(league.play_path),
+            'videos': league.list_videos_by_guessed_popularity(
+                league.play_path),
             'total_size': league.total_size(league.play_path)
         })
 
