@@ -17,7 +17,7 @@
 
                     {% include 'popularity.html' with guessed_popularity=True %}
                     {{ videos.0.guessed_popularity }}?</span>
-                    <small>({{ videos.0.duration }})</small>
+                    <small>({{ videos.0.duration|time:"H:i:s" }})</small>
                     {{ videos.0.name|slice:":30" }}...
 
                     <div class="btn-group  btn-group-lg" role="group">

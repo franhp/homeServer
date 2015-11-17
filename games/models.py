@@ -2,7 +2,7 @@ import os
 import random
 import re
 import shutil
-from datetime import datetime
+from datetime import datetime, timedelta
 from ffvideo import VideoStream
 
 from django.db import models
@@ -124,7 +124,7 @@ class LeagueVideo(models.Model):
     @property
     def duration(self):
         vs = VideoStream(self.video_full_path)
-        return '%.2f' % vs.duration
+        return timedelta(seconds=vs.duration)
 
     @property
     def poster(self):
