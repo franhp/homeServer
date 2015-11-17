@@ -121,7 +121,7 @@ class LeagueVideo(models.Model):
     @property
     def duration(self):
         vs = VideoStream(self.video_full_path)
-        return '%.2f' % vs.duration
+        return '%.2f' % vs.duration  # TODO requires formatting!
 
     @property
     def poster(self):
