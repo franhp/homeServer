@@ -3,11 +3,13 @@ import random
 import re
 import shutil
 from datetime import datetime
+from ffvideo import VideoStream
 
 from django.db import models
 from django.db.models import Count
 from taggit.managers import TaggableManager
 from taggit.models import Tag
+from django.conf import settings
 
 
 class League(models.Model):
@@ -115,6 +117,23 @@ class LeagueVideo(models.Model):
         for word in re.findall(r'[a-zA-Z0-9]+', self.name):
             score += LeagueVideo.objects.filter(tags__name=word.lower()).count()
         return score
+
+    @property
+    def duration(self):
+        vs = VideoStream(self.video_full_path)
+        return '%.2f' % vs.duration
+
+    @property
+    def poster(self):
+        image_filename = self.name + '.jpg'
+        image_filepath = os.path.join(settings.THUMBNAILS_DIR, image_filename)
+        if not os.path.exists(image_filepath):
+            self._generate_thumbnail(image_filepath)
+        return image_filename
+
+    def _generate_thumbnail(self, image_filepath):
+        vs = VideoStream(self.video_full_path)
+        vs.get_frame_at_sec(60).image().save(image_filepath)
 
     def auto_generate_tags(self):
 

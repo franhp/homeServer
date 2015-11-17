@@ -114,6 +114,9 @@ class Base(Configuration):
 
     TAGGIT_CASE_INSENSITIVE = True
 
+    # Games
+    THUMBNAILS_DIR = os.path.join('~/Pictures', 'thumbnails')
+
 
 class Dev(Base):
     DEBUG = True
