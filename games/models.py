@@ -98,7 +98,7 @@ class LeagueVideo(models.Model):
     created_at = models.DateTimeField(auto_created=True, default=datetime.now)
 
     def __unicode__(self):
-        return '(%s) %s [%s]' % (self.league, self.name, self.tags)
+        return '(%s) %s [%s]' % (self.league, self.name, self.tags.all())
 
     @property
     def name(self):
