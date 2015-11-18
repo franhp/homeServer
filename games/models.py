@@ -53,7 +53,7 @@ class League(models.Model):
 
     def gather_random_contestants(self, videos_path):
         less_voted_first = self.list_videos(
-            videos_path, key=lambda x: x.times_voted)[:20]
+            videos_path, key=lambda x: x.times_voted)[-20:]
         return random.sample(less_voted_first, 2)
 
     def cleanup(self):

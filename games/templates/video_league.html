@@ -36,7 +36,7 @@
 
                 </form>
             </h2>
-            <video width="460" height="240" controls="controls" preload="none" >
+            <video width="460" height="240" controls="controls" preload="none" poster="{{ STATIC_URL }}thumbnails/{{ contestant1.poster }}">
                 <source src="{{ MEDIA_URL }}{{ contestant1.video_rel_path }}" type="video/{{ contestant1.video_rel_path|slice:"-3:" }}" />
             </video>
         </div>
@@ -64,7 +64,7 @@
 
                 </form>
             </h2>
-            <video width="460" height="240" controls="controls" preload="none" >
+            <video width="460" height="240" controls="controls" preload="none" poster="{{ STATIC_URL }}thumbnails/{{ contestant2.poster }}">
                 <source src="{{ MEDIA_URL }}{{ contestant2.video_rel_path }}" type="video/{{ contestant2.video_rel_path|slice:"-3:" }}" />
             </video>
         </div>
