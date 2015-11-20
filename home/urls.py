@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from rest_framework.routers import DefaultRouter
 from games.views import (
     RandomDirectoryCleanerView, LeagueView, SearchAndTagView, ShowVideoView,
-    TagView, VideoView, RankingView)
+    TagView, VideoView, RankingView, RandomView)
 from home.views import HomeView
 from say.views import SayView
 from smart_downloader.views import SmartDownloaderView
@@ -38,5 +38,7 @@ urlpatterns = patterns('',
         ShowVideoView.as_view()), name='show-video'),
    url(r'^ranking/$', login_required(
         RankingView.as_view()), name='ranking'),
+    url(r'^random/$', login_required(
+        RandomView.as_view()), name='random-video'),
     url(r'^', include(router.urls)),
 )

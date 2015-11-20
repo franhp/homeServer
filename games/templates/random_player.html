@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block extra_head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.17.0/mediaelement-and-player.min.js"
+        xmlns="http://www.w3.org/1999/html"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.17.0/mediaelementplayer.css" />
+{% endblock %}
+
+{% block content %}
+
+    {% if video %}
+        <h3>
+            {% include 'popularity.html' %}{{ video.popularity }}</span>
+            {{ video.name }}
+            <small>({{ video.duration|time:"H:i:s" }})</small>
+        </h3>
+
+
+        <div class="col-md-8">
+
+            <video width="700" height="500" controls="controls" preload="none" poster="{{ STATIC_URL }}thumbnails/{{ video.poster }}">
+                <source src="{{ MEDIA_URL }}{{ video.video_rel_path }}" type="video/{{ video.video_rel_path|slice:"-3:" }}" />
+            </video>
+        </div>
+        <div class="col-md-4">
+            <ul id="tags">
+            {% for tag in video.tags.all %}
+                <li>{{ tag.name }}</li>
+            {% endfor %}
+            </ul>
+        </div>
+    {% else %}
+        No Video Found!
+        <a class="btn btn-info" href="{% url 'search-tag' %}"><i class="glyphicon glyphicon-menu-up"></i></a>
+    {% endif %}
+{% endblock %}
+
+{% block extra_javascript %}
+<script>
+$('video,audio').mediaelementplayer({
+    // remove or reorder to change plugin priority
+    plugins: ['flash','silverlight'],
+    // specify to force MediaElement to use a particular video or audio type
+    type: '',
+    // path to Flash and Silverlight plugins
+    pluginPath: '{{ STATIC_URL }}/plugins/',
+    // name of flash file
+    flashName: 'flashmediaelement.swf',
+    // name of silverlight file
+    silverlightName: 'silverlightmediaelement.xap',
+    // rate in milliseconds for Flash and Silverlight to fire the timeupdate event
+    // larger number is less accurate, but less strain on plugin->JavaScript bridge
+    timerRate: 250,
+    enableKeyboard: false,
+    success: function (mediaElement, domObject){
+        mediaElement.play();
+    }
+});
+</script>
+{% endblock %}

@@ -80,6 +80,15 @@ class FilterGameView(TemplateView):
     # TODO IDEA: Tag all the videos, how much time you got?
     # go random playlist!
 
+class RandomView(TemplateView):
+    template_name = 'random_player.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(RandomView, self).get_context_data(**kwargs)
+        league = League.objects.get(name='VideoLeague')
+        context['video'] = league.get_random_video(league.library_path)
+        return context
+
 
 class SearchAndTagView(TemplateView):
     template_name = 'search_and_tag.html'

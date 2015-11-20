@@ -56,6 +56,9 @@ class League(models.Model):
             videos_path, key=lambda x: x.times_voted)[-20:]
         return random.sample(less_voted_first, 2)
 
+    def get_random_video(self, videos_path):
+        return random.sample(self.list_videos(videos_path), 1)[0]
+
     def cleanup(self):
         for video in self.league.all():
             if not os.path.exists(video.video_full_path):

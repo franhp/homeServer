@@ -29,7 +29,7 @@
                         <span class="badge">
                     {% endif %}
                     {{ contestant1.popularity }}</span>
-                    {{ contestant1.name|slice:":20" }}
+                    <a href="{% url 'show-video' contestant1.id %}">{{ contestant1.name|slice:":19" }}</a>
 
                     <input type="hidden" name="vote_down" value="{{ contestant2.id }}" />
                     <button type="submit" name="vote_up" value="{{ contestant1.id }}" class="btn btn-success"><span class="glyphicon glyphicon-heart"></span> </button>
@@ -57,7 +57,7 @@
                     {% else %}
                         <span class="badge">
                     {% endif %}{{ contestant2.popularity }}</span>
-                    {{ contestant2.name|slice:":20" }}
+                    <a href="{% url 'show-video' contestant2.id %}">{{ contestant2.name|slice:":19" }}</a>
 
                     <input type="hidden" name="vote_down" value="{{ contestant1.id }}" />
                     <button type="submit" name="vote_up" value="{{ contestant2.id }}" class="btn btn-success"><span class="glyphicon glyphicon-heart"></span> </button>
