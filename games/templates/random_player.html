@@ -23,6 +23,8 @@
             </video>
         </div>
         <div class="col-md-4">
+            <button class="btn btn-danger btn-lg" onclick="window.location.reload()"><span class="glyphicon glyphicon-chevron-right"></span></button>
+            <hr>
             <ul id="tags">
             {% for tag in video.tags.all %}
                 <li>{{ tag.name }}</li>
