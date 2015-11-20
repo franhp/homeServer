@@ -53,7 +53,6 @@ $('video,audio').mediaelementplayer({
     // rate in milliseconds for Flash and Silverlight to fire the timeupdate event
     // larger number is less accurate, but less strain on plugin->JavaScript bridge
     timerRate: 250,
-    enableKeyboard: false,
     success: function (mediaElement, domObject){
         mediaElement.play();
     }
