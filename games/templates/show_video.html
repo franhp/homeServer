@@ -63,8 +63,12 @@
                 <h4> Thumbnail second:</h4>
                 <form method="post" action="{% url 'show-video' video.id %}">
                     {% csrf_token %}
-                    <input type="text" name="at_second" value="{{ video.thumbnail_second }}">
-                    <input type="submit">
+                    <div class="input-group">
+                        <input type="number" class="form-control" step="10" name="at_second" value="{{ video.thumbnail_second }}">
+                        <span class="input-group-btn">
+                            <input type="submit" class="btn btn-default">
+                        </span>
+                    </div>
                 </form>
 
             </div>
