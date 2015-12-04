@@ -124,12 +124,15 @@ class ShowVideoView(TemplateView):
         vote_up = request.POST.get('vote_up')
         vote_down = request.POST.get('vote_down')
         video_id = kwargs.pop('video_id')
+        at_second = request.POST.get('at_second')
 
         vid = LeagueVideo.objects.get(id=video_id)
         if vote_up:
             vid.vote_up()
         elif vote_down:
             vid.vote_down()
+        elif at_second:
+            vid.set_thumbnail_second(at_second)
 
         return HttpResponseRedirect(reverse('show-video', args=(video_id,)))
 

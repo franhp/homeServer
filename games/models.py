@@ -99,6 +99,7 @@ class LeagueVideo(models.Model):
     league = models.ForeignKey(League, related_name='league')
     tags = TaggableManager()
     created_at = models.DateTimeField(auto_created=True, default=datetime.now)
+    thumbnail_second = models.IntegerField(default=60)
 
     def __unicode__(self):
         return '(%s) %s [%s]' % (self.league, self.name, self.tags.all())
@@ -130,16 +131,28 @@ class LeagueVideo(models.Model):
         return (datetime(1,1,1,0,0,0) + timedelta(seconds=vs.duration)).time()
 
     @property
-    def poster(self):
+    def thumbnail_file(self):
         image_filename = self.name + '.jpg'
         image_filepath = os.path.join(settings.THUMBNAILS_DIR, image_filename)
+        return image_filename, image_filepath
+
+    @property
+    def poster(self):
+        image_filename, image_filepath = self.thumbnail_file
         if not os.path.exists(image_filepath):
-            self._generate_thumbnail(image_filepath)
+            self._generate_thumbnail(
+                image_filepath, at_second=self.thumbnail_second)
         return image_filename
 
-    def _generate_thumbnail(self, image_filepath):
+    def set_thumbnail_second(self, at_second):
+        _, image_filepath = self.thumbnail_file
+        self._generate_thumbnail(image_filepath, at_second=at_second)
+        self.thumbnail_second = at_second
+        self.save()
+
+    def _generate_thumbnail(self, image_filepath, at_second=60):
         vs = VideoStream(self.video_full_path)
-        vs.get_frame_at_sec(60).image().save(image_filepath)
+        vs.get_frame_at_sec(int(at_second)).image().save(image_filepath)
 
     def auto_generate_tags(self):
 
