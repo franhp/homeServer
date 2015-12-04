@@ -89,6 +89,11 @@ class RandomView(TemplateView):
         context['video'] = league.get_random_video(league.library_path)
         return context
 
+    def post(self, request, *args, **kwargs):
+        LeagueVideo.objects.get(id=request.POST.get('vote')).vote_up()
+        return HttpResponseRedirect(reverse('random-video'))
+
+
 
 class SearchAndTagView(TemplateView):
     template_name = 'search_and_tag.html'
