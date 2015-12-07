@@ -131,6 +131,10 @@ class LeagueVideo(models.Model):
         return (datetime(1,1,1,0,0,0) + timedelta(seconds=vs.duration)).time()
 
     @property
+    def video_information(self):
+        return VideoStream(self.video_full_path)
+
+    @property
     def thumbnail_file(self):
         image_filename = self.name + '.jpg'
         image_filepath = os.path.join(settings.THUMBNAILS_DIR, image_filename)
