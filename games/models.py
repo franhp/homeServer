@@ -110,12 +110,12 @@ class LeagueVideo(models.Model):
 
     @property
     def popularity(self):
-        # if not self.tags.exists():
-        #    self.auto_generate_tags()
+        popular = [tag.name for tag in self.league.ranking()[:5]]
 
         score = self.votes
         for tag in self.tags.all():
-            score += LeagueVideo.objects.filter(tags=tag).count()
+            video_count = LeagueVideo.objects.filter(tags=tag).count()
+            score += video_count if tag not in popular else video_count / 3
         return score
 
     @property
