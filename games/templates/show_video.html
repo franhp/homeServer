@@ -77,7 +77,7 @@
                 <div class="well">
                     codec: {{ video.video_information.codec_name }}<br>
                     duration: {{ video.duration|time:"H:i:s"  }}<br>
-                    bit rate: {{ video.video_information.bitrate }}<br>
+                    bit rate: {{ video.video_information.bitrate|filesizeformat }}<br>
                     frame size: {{ video.video_information.frame_width }}x{{ video.video_information.frame_height }}<br>
                     frame mode: {{ video.video_information.frame_mode }}<br>
                 </div>
