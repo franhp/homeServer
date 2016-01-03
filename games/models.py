@@ -3,7 +3,7 @@ import random
 import re
 import shutil
 from datetime import datetime, timedelta
-from ffvideo import VideoStream
+from ffvideo import VideoStream, NoMoreData
 
 from django.db import models
 from django.db.models import Count
@@ -156,7 +156,10 @@ class LeagueVideo(models.Model):
 
     def _generate_thumbnail(self, image_filepath, at_second=60):
         vs = VideoStream(self.video_full_path)
-        vs.get_frame_at_sec(int(at_second)).image().save(image_filepath)
+        try:
+            vs.get_frame_at_sec(int(at_second)).image().save(image_filepath)
+        except Exception:
+            pass
 
     def auto_generate_tags(self):
 
