@@ -36,7 +36,10 @@
                 <li>{{ tag.name }}</li>
             {% endfor %}
             </ul>
+            <hr>
+            {% include 'video_info.html' %}
         </div>
+        
     {% else %}
         No Video Found!
         <a class="btn btn-info" href="{% url 'search-tag' %}"><i class="glyphicon glyphicon-menu-up"></i></a>
