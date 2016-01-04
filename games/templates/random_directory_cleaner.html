@@ -30,6 +30,8 @@
             <video width="700" height="500" controls="controls" preload="none" poster="{{ STATIC_URL }}thumbnails/{{ videos.0.poster }}" >
                 <source src="{{ MEDIA_URL }}{{ videos.0.video_rel_path }}" type="video/{{ videos.0.video_rel_path|slice:"-3:" }}" />
             </video>
+
+            {% include 'video_info.html' %}
         </div>
 
         <div class="col-md-3 col-sm-12 pull-right">
@@ -60,9 +62,7 @@
             </table>
         </div>
 
-        <div class="col-sm-12">
-            {% include 'video_info.html' %}
-        </div>
+
 
 
     {% else %}
