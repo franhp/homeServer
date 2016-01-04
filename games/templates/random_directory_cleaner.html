@@ -31,7 +31,7 @@
                 <source src="{{ MEDIA_URL }}{{ videos.0.video_rel_path }}" type="video/{{ videos.0.video_rel_path|slice:"-3:" }}" />
             </video>
 
-            {% include 'video_info.html' %}
+            {% include 'video_info.html' with video=videos.0%}
         </div>
 
         <div class="col-md-3 col-sm-12 pull-right">
