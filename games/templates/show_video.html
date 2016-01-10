@@ -26,7 +26,8 @@
             </div>
         </div>
         <hr />
-        <h3>{% include 'popularity.html' %}{{ video.popularity }}</span>
+        <h3 {% include 'contestants.html' %}>
+            {% include 'popularity.html' %}{{ video.popularity }}</span>
             <small>(
             {{ video.votes }} votes
             <form action="{% url 'show-video' video.id %}" method="post" style="display: inline-block;">
