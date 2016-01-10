@@ -7,6 +7,7 @@ from ffvideo import VideoStream, NoMoreData
 
 from django.db import models
 from django.db.models import Count
+from django.utils import timezone
 from taggit.managers import TaggableManager
 from taggit.models import Tag
 from django.conf import settings
@@ -53,7 +54,7 @@ class League(models.Model):
 
     def gather_random_contestants(self, videos_path):
         less_voted_first = self.list_videos(
-            videos_path, key=lambda x: x.times_voted)[-20:]
+            videos_path, key=lambda x: x.contestant_score)[-20:]
         return random.sample(less_voted_first, 2)
 
     def get_random_video(self, videos_path):
@@ -177,6 +178,23 @@ class LeagueVideo(models.Model):
     @property
     def size(self):
         return os.stat(self.video_full_path).st_size
+
+    @property
+    def contestant_score(self):
+        # TODO would filter but this is supposed to be quick for now
+        times_voted_limit = 20 + self.times_voted
+
+        two_weeks_ago = timezone.now() - timedelta(days=15)
+        month_ago = timezone.now() - timedelta(days=30)
+        if self.created_at > month_ago and self.created_at < two_weeks_ago:
+            same_day_videos_count = LeagueVideo.objects.filter(
+                    created_at__gte=self.created_at).count()
+            return random.randint(0, same_day_videos_count) + times_voted_limit
+        elif self.created_at > two_weeks_ago:
+            return times_voted_limit
+        else:
+            return self.times_voted
+
 
     def save(self, *args, **kwargs):
         if self.votes < -5:
