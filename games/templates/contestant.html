@@ -1,0 +1,11 @@
+{% if video.votes == -1 %}
+    style="background-color: lightgrey"
+{% elif video.votes == -2 %}
+    style="background-color: yellow"
+{% elif video.votes == -3 %}
+    style="background-color: gold"
+{% elif video.votes == -4 %}
+    style="background-color: orange"
+{% elif video.votes == -5 %}
+    style="background-color: red"
+{% endif %}
