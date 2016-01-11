@@ -53,7 +53,8 @@ class LeagueView(TemplateView):
             'ranking': league.list_videos_by_votes(league.library_path),
             'contestant1': contestants[0],
             'contestant2': contestants[1],
-            'total_size': league.total_size(league.library_path)
+            'total_size': league.total_size(league.library_path),
+            'round': league.estimated_round()
         })
 
     def post(self, request, *args, **kwargs):

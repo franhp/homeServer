@@ -7,6 +7,7 @@ from ffvideo import VideoStream, NoMoreData
 
 from django.db import models
 from django.db.models import Count
+from django.db.models.aggregates import Avg
 from django.utils import timezone
 from taggit.managers import TaggableManager
 from taggit.models import Tag
@@ -90,6 +91,12 @@ class League(models.Model):
 
     def total_size(self, videos_path):
         return sum(x.size for x in self.list_videos(videos_path))
+
+    def estimated_round(self):
+        month_ago = timezone.now() - timedelta(days=30)
+        return int(LeagueVideo.objects.filter(
+                league=self, created_at__lte=month_ago
+        ).aggregate(Avg('times_voted'))['times_voted__avg'])
 
 
 class LeagueVideo(models.Model):
