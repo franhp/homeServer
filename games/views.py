@@ -47,6 +47,7 @@ class LeagueView(TemplateView):
             league = League.objects.get(name='VideoLeague')
             league.cleanup()
             contestants = league.gather_random_contestants(league.library_path)
+            percent, round_number = league.round_information()
         except ObjectDoesNotExist:
             return render(request, self.template_name, {})
         return render(request, self.template_name, {
@@ -54,7 +55,8 @@ class LeagueView(TemplateView):
             'contestant1': contestants[0],
             'contestant2': contestants[1],
             'total_size': league.total_size(league.library_path),
-            'round': league.estimated_round()
+            'round_number': round_number,
+            'percent_of_round': percent
         })
 
     def post(self, request, *args, **kwargs):

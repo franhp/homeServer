@@ -55,7 +55,7 @@ class League(models.Model):
 
     def gather_random_contestants(self, videos_path):
         less_voted_first = self.list_videos(
-            videos_path, key=lambda x: x.contestant_score)[-20:]
+            videos_path, key=lambda x: x.times_voted)[-100:]
         return random.sample(less_voted_first, 2)
 
     def get_random_video(self, videos_path):
@@ -92,11 +92,16 @@ class League(models.Model):
     def total_size(self, videos_path):
         return sum(x.size for x in self.list_videos(videos_path))
 
-    def estimated_round(self):
-        month_ago = timezone.now() - timedelta(days=30)
-        return int(LeagueVideo.objects.filter(
-                league=self, created_at__lte=month_ago
-        ).aggregate(Avg('times_voted'))['times_voted__avg'])
+    def round_information(self):
+        voting_round = int(
+                LeagueVideo.objects.all().aggregate(
+                        Avg('times_voted'))['times_voted__avg'])
+        total_videos = LeagueVideo.objects.count()
+        videos_in_this_round = LeagueVideo.objects.filter(
+                times_voted__gte=voting_round).count()
+        percent = 100 * videos_in_this_round / total_videos
+
+        return percent, voting_round
 
 
 class LeagueVideo(models.Model):
@@ -186,24 +191,11 @@ class LeagueVideo(models.Model):
     def size(self):
         return os.stat(self.video_full_path).st_size
 
-    @property
-    def contestant_score(self):
-        # TODO would filter but this is supposed to be quick for now
-        times_voted_limit = 20 + self.times_voted
-
-        two_weeks_ago = timezone.now() - timedelta(days=15)
-        month_ago = timezone.now() - timedelta(days=30)
-        if self.created_at > month_ago and self.created_at < two_weeks_ago:
-            same_day_videos_count = LeagueVideo.objects.filter(
-                    created_at__gte=self.created_at).count()
-            return random.randint(0, same_day_videos_count) + times_voted_limit
-        elif self.created_at > two_weeks_ago:
-            return times_voted_limit
-        else:
-            return self.times_voted
-
-
     def save(self, *args, **kwargs):
+        if self.pk is None:
+            _, current_round = self.league.round_information()
+            self.times_voted = current_round
+
         if self.votes < -5:
             self.delete_video()
         else:
