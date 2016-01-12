@@ -54,7 +54,9 @@ class League(models.Model):
         return self.list_videos(videos_path, key=lambda x: x.votes)
 
     def gather_random_contestants(self, videos_path):
-        return random.sample(self.list_videos(videos_path), 2)
+        less_voted_first = self.list_videos(
+            videos_path, key=lambda x: x.times_voted)[-250:]
+        return random.sample(less_voted_first, 2)
 
     def get_random_video(self, videos_path):
         return random.sample(self.list_videos(videos_path), 1)[0]
