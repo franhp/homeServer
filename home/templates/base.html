@@ -21,44 +21,52 @@
 <nav class="navbar navbar-default navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsed-navbar" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
             <a class="navbar-brand" href="{% url 'index' %}"><img src="http://franhp.net/static/img/hackergotchi-little.png"></a>
         </div>
-        <ul class="nav navbar-nav">
-            <li><a href="{% url 'say' %}" class="">say</a></li>
-            {% if user.is_authenticated %}
-                <li><a href="{% url 'smart-downloader' %}" class="">smart_downloader</a></li>
-            {% endif %}
+        <div class="collapse navbar-collapse" id="collapsed-navbar">
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'say' %}" class="">say</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'smart-downloader' %}" class="">smart_downloader</a></li>
+                {% endif %}
 
+                {% if user.is_authenticated %}
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">games <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'random-directory' %}" class="">random_directory</a></li>
+                        <li><a href="{% url 'league' %}" class="">league</a></li>
+                        <li><a href="{% url 'random-video' %}" class="">random</a></li>
+                        <li><a href="{% url 'search-tag' %}" class="">search_tag</a></li>
+                        <li><a href="{% url 'ranking' %}" class="">ranking</a></li>
+                    </ul>
+                </li>
+                {% endif %}
+                {% if user.is_superuser %}
+                    <li><a href="/admin" class="">admin</a></li>
+                {% endif %}
+            </ul>
             {% if user.is_authenticated %}
-            <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">games <span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="{% url 'random-directory' %}" class="">random_directory</a></li>
-                    <li><a href="{% url 'league' %}" class="">league</a></li>
-                    <li><a href="{% url 'random-video' %}" class="">random</a></li>
-                    <li><a href="{% url 'search-tag' %}" class="">search_tag</a></li>
-                    <li><a href="{% url 'ranking' %}" class="">ranking</a></li>
-                </ul>
-            </li>
+                <form class="navbar-form navbar-right" action="{% url 'logout' %}" method="post" accept-charset="utf-8">
+                    <small>logged as <strong>{{ user }}</strong>.&nbsp;</small>
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit"><i class="icon-off icon-white"></i> logout</button>
+                </form>
+            {% else %}
+                <form class="navbar-form navbar-right" action="{% url 'login' %}" method="post" accept-charset="utf-8">
+                    {% csrf_token %}
+                    <input class="span2" type="text" name="username" placeholder="Username" id="username" />
+                    <input class="span2" type="password" name="password" placeholder="Password" id="password" />
+                    <button class="btn btn-success" type="submit"><i class="icon-user icon-white"></i> login</button>
+                </form>
             {% endif %}
-            {% if user.is_superuser %}
-                <li><a href="/admin" class="">admin</a></li>
-            {% endif %}
-        </ul>
-        {% if user.is_authenticated %}
-            <form class="navbar-form navbar-right" action="{% url 'logout' %}" method="post" accept-charset="utf-8">
-                <small>logged as <strong>{{ user }}</strong>.&nbsp;</small>
-                {% csrf_token %}
-                <button class="btn btn-danger" type="submit"><i class="icon-off icon-white"></i> logout</button>
-            </form>
-        {% else %}
-            <form class="navbar-form navbar-right" action="{% url 'login' %}" method="post" accept-charset="utf-8">
-                {% csrf_token %}
-                <input class="span2" type="text" name="username" placeholder="Username" id="username" />
-                <input class="span2" type="password" name="password" placeholder="Password" id="password" />
-                <button class="btn btn-success" type="submit"><i class="icon-user icon-white"></i> login</button>
-            </form>
-        {% endif %}
+        </div>
     </div>
 </nav>
 
