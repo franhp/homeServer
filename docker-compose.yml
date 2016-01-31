@@ -44,8 +44,11 @@ rabbitmq:
 sick-beard:
   build: sick-beard
   volumes:
-    - ./data/sickbeard-db:/app/xxxx
-    - ./configs/sick.conf:/app/sick.conf
+    - ./configs/sickbeard-config.ini:/app/config.ini
+    - ./data/sickbeard-db/databases/:/app/databases/
+    - /Users/franhp/Movies/Series/:/Users/franhp/Movies/Series/
+  ports:
+    - "8081:8081"
 
 gitlab:
   build: gitlab
