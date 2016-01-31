@@ -69,9 +69,9 @@ class Base(Configuration):
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'homeserver',
-            'USER': 'root',
-            'PASSWORD': '',
-            'HOST': 'localhost',
+            'USER': os.environ.get('MYSQL_USER', 'root'),
+            'PASSWORD': os.environ.get('MYSQL_PASSWORD', ''),
+            'HOST': 'mysql',
             'PORT': '3306',
         }
     }
@@ -99,7 +99,7 @@ class Base(Configuration):
 
 
     # Celery
-    BROKER_URL = 'amqp://guest:guest@localhost//'
+    BROKER_URL = 'amqp://guest:guest@rabbitmq//'
 
     CELERY_ACCEPT_CONTENT = ['pickle']
     CELERY_TASK_SERIALIZER = 'pickle'

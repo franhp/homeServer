@@ -1,0 +1,57 @@
+proxy:
+  image: nginx
+  volumes:
+    - configs/nginx.conf:/etc/nginx/conf.d/default.conf
+  links:
+    - sick-beard:sick-beard
+    - gitlab:gitlab
+    - homeserver:homeserver
+
+homeserver:
+  build: .
+  environment:
+    - DJANGO_SECRET_KEY=very_secret_key
+    - DJANGO_CONFIGURATION=Prod
+    - MYSQL_USER=root
+    - MYSQL_PASSWORD=awesome_password
+  ports:
+    - "8000:8000"
+  links:
+    - mysql:mysql
+    - rabbitmq:rabbitmq
+    #- celery:celery
+
+celery:
+  build: .
+
+mysql:
+  image: mysql
+  environment:
+    - MYSQL_ROOT_PASSWORD=awesome_password
+    - MYSQL_DATABASE=homeserver
+  volumes:
+    - ./data/db/:/var/lib/mysql
+    - ./configs/local-db.sh:/local-db.sh
+  command: "/local-db.sh"
+  ports:
+    - "3306:3306"
+
+rabbitmq:
+  image: rabbitmq:management
+  ports:
+    - "15672:15672"
+
+sick-beard:
+  build: sick-beard
+  volumes:
+    - ./data/sickbeard-db:/app/xxxx
+    - ./configs/sick.conf:/app/sick.conf
+
+gitlab:
+  build: gitlab
+  links:
+    - redis:redis
+    #- ssh-endpoint:ssh-endpoint?
+
+redis:
+  image: redis
