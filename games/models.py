@@ -18,6 +18,7 @@ class League(models.Model):
     rules = models.TextField(blank=True)
     library_path = models.CharField(max_length=255, null=True, blank=True)
     play_path = models.CharField(max_length=255, null=True, blank=True)
+    relative_prefix = models.CharField(max_length=255, null=True, blank=True)
 
     def __unicode__(self):
         return self.name
@@ -73,7 +74,10 @@ class League(models.Model):
                 for name in files:
                     video_path = os.path.join(root, name)
                     rel_path = os.path.join(
-                        os.path.relpath(root, self.library_path), name)
+                        self.relative_prefix,
+                        os.path.relpath(root, self.library_path),
+                        name
+                    )
                     if not is_commonly_not_used(name):
                         v, new = LeagueVideo.objects.get_or_create(
                             video_full_path=video_path,
