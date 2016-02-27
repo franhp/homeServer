@@ -11,6 +11,7 @@
         body {
             padding-top: 70px;
             padding-bottom: 70px;
+            background-color: #d7d7d7;
         }
     </style>
     {% block extra_head %}{% endblock %}
@@ -18,7 +19,7 @@
 
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-inverse navbar-default navbar-fixed-top" style="color:white;">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsed-navbar" aria-expanded="false">
@@ -78,8 +79,8 @@
     {% block content %}Empty page{% endblock %}
 </div> <!-- container -->
 
-<nav class="navbar navbar-default">
-  <div class="container">
+<nav class="navbar navbar-inverse navbar-default navbar-fixed-bottom">
+  <div class="container" style="color:white;">
     <p>by <a href="http://franhp.net">Fran Hermoso</a></p>
   </div>
 </nav>

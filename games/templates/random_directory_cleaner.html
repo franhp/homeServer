@@ -20,7 +20,7 @@
                     </div>
 
 
-                    {{ videos.0.name|slice:":40" }}<i id="restOfTheTitle" style="display: none;">{{ videos.0.name|slice:"40:" }}</i><a id="restOfTheTitleButton" class="btn btn-xs" onclick="$('#restOfTheTitle').show();$('#restOfTheTitleButton').hide()"><i class="glyphicon glyphicon-plus-sign"></i></a>
+                    {{ videos.0.name|slice:":40" }}<i id="rest-of-the-title" style="display: none;">{{ videos.0.name|slice:"40:" }}</i><a id="rest-of-the-title-button" class="btn btn-xs" onclick="$('#rest-of-the-title').show();$('#rest-of-the-title-button').hide()"><i class="glyphicon glyphicon-plus-sign"></i></a>
 
                     <small>({{ videos.0.duration|time:"H:i:s" }})</small>
                 </form>
