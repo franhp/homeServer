@@ -18,6 +18,11 @@
                       <button type="submit" name="archive_id" value="{{ videos.0.id }}" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span></button>
                       <button type="submit" name="delete_id" value="{{ videos.0.id }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove-sign"></span></button>
                     </div>
+
+
+                    {{ videos.0.name|slice:":40" }}<i id="restOfTheTitle" style="display: none;">{{ videos.0.name|slice:"40:" }}</i><a id="restOfTheTitleButton" class="btn btn-xs" onclick="$('#restOfTheTitle').show();$('#restOfTheTitleButton').hide()"><i class="glyphicon glyphicon-plus-sign"></i></a>
+
+                    <small>({{ videos.0.duration|time:"H:i:s" }})</small>
                 </form>
             </h3>
 
