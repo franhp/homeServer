@@ -89,13 +89,13 @@ class League(models.Model):
     def total_size(self, videos_path):
         return sum(x.size for x in self.list_videos(videos_path))
 
-    def round_information(self):
+    def round_information(self, league):
         voting_round = int(
-                LeagueVideo.objects.all().aggregate(
+                LeagueVideo.objects.filter(league__name=league).aggregate(
                         Avg('times_voted'))['times_voted__avg'])
-        total_videos = LeagueVideo.objects.count()
+        total_videos = LeagueVideo.objects.filter(league__name=league).count()
         videos_in_this_round = LeagueVideo.objects.filter(
-                times_voted__gte=voting_round).count()
+                league__name=league, times_voted__gte=voting_round).count()
         percent = 100 * videos_in_this_round / total_videos
 
         return percent, voting_round

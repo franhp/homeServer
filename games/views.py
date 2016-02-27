@@ -49,7 +49,7 @@ class LeagueView(TemplateView):
             league = League.objects.get(name=league)
             league.cleanup()
             contestants = league.gather_random_contestants(league.library_path)
-            percent, round_number = league.round_information()
+            percent, round_number = league.round_information(league.name)
         except ObjectDoesNotExist:
             return render(request, self.template_name, {})
         return render(request, self.template_name, {
