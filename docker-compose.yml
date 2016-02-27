@@ -3,8 +3,6 @@ proxy:
   volumes:
     - configs/nginx.conf:/etc/nginx/conf.d/default.conf
   links:
-    - sick-beard:sick-beard
-    - gitlab:gitlab
     - homeserver:homeserver
 
 homeserver:
@@ -21,8 +19,8 @@ homeserver:
     - rabbitmq:rabbitmq
     #- celery:celery
 
-celery:
-  build: .
+#celery:
+#  build: .
 
 mysql:
   image: mysql
@@ -40,21 +38,3 @@ rabbitmq:
   image: rabbitmq:management
   ports:
     - "15672:15672"
-
-sick-beard:
-  build: sick-beard
-  volumes:
-    - ./configs/sickbeard-config.ini:/app/config.ini
-    - ./data/sickbeard-db/databases/:/app/databases/
-    - /Users/franhp/Movies/Series/:/Users/franhp/Movies/Series/
-  ports:
-    - "8081:8081"
-
-gitlab:
-  build: gitlab
-  links:
-    - redis:redis
-    #- ssh-endpoint:ssh-endpoint?
-
-redis:
-  image: redis
