@@ -74,10 +74,12 @@ class League(models.Model):
                 for name in files:
                     video_path = os.path.join(root, name)
                     rel_path = os.path.join(
-                        self.relative_prefix,
+
                         os.path.relpath(root, self.library_path),
                         name
                     )
+                    if self.relative_prefix:
+                        rel_path = os.path.join(self.relative_prefix, rel_path)
                     if not is_commonly_not_used(name):
                         v, new = LeagueVideo.objects.get_or_create(
                             video_full_path=video_path,
@@ -139,7 +141,7 @@ class LeagueVideo(models.Model):
     def duration(self):
         vs = VideoStream(self.video_full_path)
         return (
-        datetime(1, 1, 1, 0, 0, 0) + timedelta(seconds=vs.duration)).time()
+            datetime(1, 1, 1, 0, 0, 0) + timedelta(seconds=vs.duration)).time()
 
     @property
     def video_information(self):
