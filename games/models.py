@@ -47,9 +47,6 @@ class League(models.Model):
     def list_videos_by_popularity(self, videos_path):
         return self.list_videos(videos_path, key=lambda x: x.popularity)
 
-    def list_videos_by_guessed_popularity(self, videos_path):
-        return self.list_videos(videos_path, key=lambda x: x.guessed_popularity)
-
     def list_videos_by_votes(self, videos_path):
         return self.list_videos(videos_path, key=lambda x: x.votes)
 
@@ -129,13 +126,6 @@ class LeagueVideo(models.Model):
         for tag in self.tags.all():
             video_count = LeagueVideo.objects.filter(tags=tag).count()
             score += video_count if tag not in popular else video_count / 3
-        return score
-
-    @property
-    def guessed_popularity(self):
-        score = 0
-        for word in re.findall(r'[a-zA-Z0-9]+', self.name):
-            score += LeagueVideo.objects.filter(tags__name=word.lower()).count()
         return score
 
     @property

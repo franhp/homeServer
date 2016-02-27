@@ -14,12 +14,6 @@
             <h3>
                 <form method="post" action="{% url 'random-directory' %}">
                     {% csrf_token %}
-
-                    {% include 'popularity.html' with guessed_popularity=True %}
-                    {{ videos.0.guessed_popularity }}?</span>
-                    <small>({{ videos.0.duration|time:"H:i:s" }})</small>
-                    {{ videos.0.name|slice:":30" }}...
-
                     <div class="btn-group  btn-group-lg" role="group">
                       <button type="submit" name="archive_id" value="{{ videos.0.id }}" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span></button>
                       <button type="submit" name="delete_id" value="{{ videos.0.id }}" class="btn btn-danger"><span class="glyphicon glyphicon-remove-sign"></span></button>
@@ -38,14 +32,11 @@
             <h2>All Videos <br><small>({{ videos|length }} remaining) ({{ total_size|filesizeformat }}) </small></h2>
             <table class="table">
             <thead>
-            <td>Score</td><td>Name</td><td>Actions</td>
+            <td>Name</td><td>Actions</td>
             </thead>
             <tr>
             {% for video in videos %}
                 <tr>
-                    <td>
-                        {% include 'popularity.html' %}
-                        {{ video.guessed_popularity }}</span></td>
                     <td>{{ video.name|slice:":25" }}</td>
                     <td>
                         <form method="post" action="{% url 'random-directory' %}">
