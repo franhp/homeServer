@@ -12,7 +12,7 @@
 
         <div class="col-sm-12 col-md-9">
             <h3>
-                <form method="post" action="{% url 'random-directory' %}">
+                <form method="post" action="{% url 'random-directory' videos.0.league %}">
                     {% csrf_token %}
                     <div class="btn-group  btn-group-lg" role="group">
                       <button type="submit" name="archive_id" value="{{ videos.0.id }}" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span></button>
@@ -44,7 +44,7 @@
                 <tr>
                     <td>{{ video.name|slice:":25" }}</td>
                     <td>
-                        <form method="post" action="{% url 'random-directory' %}">
+                        <form method="post" action="{% url 'random-directory' video.league%}">
                             {% csrf_token %}
                             <div class="btn-group  btn-group-xs" role="group">
                               <button type="submit" name="archive_id" value="{{ video.id }}" class="btn btn-success"><span class="glyphicon glyphicon-ok-sign"></span> </button>

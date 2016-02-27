@@ -17,7 +17,7 @@
                 {% endif %}
             </div>
             <div class="col-md-4 text-center">
-                <a class="btn btn-info" href="{% url 'search-tag' %}"><i class="glyphicon glyphicon-menu-up"></i></a>
+                <a class="btn btn-info" href="{% url 'search-tag' video.league %}"><i class="glyphicon glyphicon-menu-up"></i></a>
             </div>
             <div class="col-md-4 text-right">
                 {% if video.get_next_by_created_at %}
@@ -82,7 +82,7 @@
         {% endif %}
     {% else %}
         No Video Found!
-        <a class="btn btn-info" href="{% url 'search-tag' %}"><i class="glyphicon glyphicon-menu-up"></i></a>
+        <a class="btn btn-info" href="{% url 'search-tag' leagues.0 %}"><i class="glyphicon glyphicon-menu-up"></i></a>
     {% endif %}
 {% endblock %}
 

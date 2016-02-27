@@ -15,8 +15,9 @@ class RandomDirectoryCleanerView(TemplateView):
     template_name = 'random_directory_cleaner.html'
 
     def get(self, request, *args, **kwargs):
+        league = self.kwargs.pop('league')
         try:
-            league = League.objects.get(name='VideoLeague')
+            league = League.objects.get(name=league)
             league.cleanup()
         except ObjectDoesNotExist:
             return render(request, self.template_name, {})
@@ -27,6 +28,7 @@ class RandomDirectoryCleanerView(TemplateView):
         })
 
     def post(self, request, *args, **kwargs):
+        league = self.kwargs.pop('league')
         archive = request.POST.get('archive_id')
         delete = request.POST.get('delete_id')
         if archive:
@@ -35,15 +37,16 @@ class RandomDirectoryCleanerView(TemplateView):
         elif delete:
             vid = LeagueVideo.objects.get(id=delete)
             vid.delete_video()
-        return HttpResponseRedirect(reverse('random-directory'))
+        return HttpResponseRedirect(reverse('random-directory', (league,)))
 
 
 class LeagueView(TemplateView):
     template_name = 'video_league.html'
 
     def get(self, request, *args, **kwargs):
+        league = self.kwargs.pop('league')
         try:
-            league = League.objects.get(name='VideoLeague')
+            league = League.objects.get(name=league)
             league.cleanup()
             contestants = league.gather_random_contestants(league.library_path)
             percent, round_number = league.round_information()
@@ -59,6 +62,7 @@ class LeagueView(TemplateView):
         })
 
     def post(self, request, *args, **kwargs):
+        league = self.kwargs.pop('league')
         vote_up = request.POST.get('vote_up')
         vote_down = request.POST.get('vote_down')
         delete_id = request.POST.get('delete_id')
@@ -74,7 +78,7 @@ class LeagueView(TemplateView):
             vid = LeagueVideo.objects.get(id=delete_id)
             vid.delete_video()
 
-        return HttpResponseRedirect(reverse('league'))
+        return HttpResponseRedirect(reverse('league', (league,)))
 
 
 class FilterGameView(TemplateView):
@@ -86,14 +90,16 @@ class RandomView(TemplateView):
     template_name = 'random_player.html'
 
     def get_context_data(self, **kwargs):
+        league = self.kwargs.pop('league')
         context = super(RandomView, self).get_context_data(**kwargs)
-        league = League.objects.get(name='VideoLeague')
+        league = League.objects.get(name=league)
         context['video'] = league.get_random_video(league.library_path)
         return context
 
     def post(self, request, *args, **kwargs):
+        league = self.kwargs.pop('league')
         LeagueVideo.objects.get(id=request.POST.get('vote')).vote_up()
-        return HttpResponseRedirect(reverse('random-video'))
+        return HttpResponseRedirect(reverse('random-video', (league,)))
 
 
 
@@ -101,8 +107,9 @@ class SearchAndTagView(TemplateView):
     template_name = 'search_and_tag.html'
 
     def get(self, request, *args, **kwargs):
-        League.objects.get(name='VideoLeague').cleanup()
-        return render(request, self.template_name, {})
+        league = self.kwargs.pop('league')
+        League.objects.get(name=league).cleanup()
+        return render(request, self.template_name, {'league': league})
 
 
 class ShowVideoView(TemplateView):
@@ -143,9 +150,11 @@ class RankingView(TemplateView):
     template_name = 'ranking.html'
 
     def get_context_data(self, **kwargs):
+        league = self.kwargs.pop('league')
         context = super(RankingView, self).get_context_data(**kwargs)
-        league = League.objects.get(name='VideoLeague')
+        league = League.objects.get(name=league)
         context['ranking'] = league.ranking()
+        context['league'] = league
         return context
 
 
@@ -166,6 +175,13 @@ class VideoView(viewsets.ModelViewSet):
     search_fields = ('tags__slug', 'tags__name', )
     ordering_fields = '__all__'
     ordering = '-created_at'
+
+    def get_queryset(self):
+        queryset = LeagueVideo.objects.all()
+        league = self.request.query_params.get('league', None)
+        if league is not None:
+            queryset = queryset.filter(league__name=league)
+        return queryset
 
 
 class TagSerializer(serializers.ModelSerializer):

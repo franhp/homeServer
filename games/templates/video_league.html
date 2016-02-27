@@ -18,7 +18,7 @@
     <div class="row">
         <div class="col-md-5 col-sm-12" {% include 'contestant.html' with video=contestant1 %}>
             <h2>
-                <form method="post" action="{% url 'league' %}">
+                <form method="post" action="{% url 'league' contestant1.league %}">
                     {% csrf_token %}
 
                      {% if contestant1.popularity > 30 %}
@@ -47,7 +47,7 @@
         </div>
         <div class="col-md-5 col-sm-12" {% include 'contestant.html' with video=contestant2 %}>
             <h2>
-                <form method="post" action="{% url 'league' %}">
+                <form method="post" action="{% url 'league' contestant2.league%}">
                     {% csrf_token %}
 
                      {% if contestant2.popularity > 30 %}
@@ -87,7 +87,7 @@
             <ul class="list-group">
                 {% for r in ranking|slice:"-15:" %}
                     <li class="list-group-item">
-                    <form action="{% url 'league' %}" method="post">
+                    <form action="{% url 'league' r.league %}" method="post">
                         {% csrf_token %}
                         <span class="badge">{{ r.votes }} + {{ r.popularity }}</span>
 

@@ -6,7 +6,7 @@
 <ul class="list-group">
 {% for word in ranking %}
     <li class="list-group-item">
-        <a href="{% url 'search-tag' %}?search={{ word.name|slugify }}">{{ word.name }}</a>
+        <a href="{% url 'search-tag' league %}?search={{ word.name|slugify }}">{{ word.name }}</a>
         <span class="badge">{{ word.num_videos }} times</span>
     </li>
 {% endfor %}

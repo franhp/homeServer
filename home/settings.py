@@ -1,6 +1,7 @@
 import os
 
 from configurations import Configuration, values
+from django.conf import global_settings
 
 
 class Base(Configuration):
@@ -97,6 +98,9 @@ class Base(Configuration):
     STATIC_URL = '/static/'
     MEDIA_URL = 'http://franhp.no-ip.org/media/'
 
+    # Template context processors
+    TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS +\
+                                  ('home.context_processors.leagues',)
 
     # Celery
     BROKER_URL = 'amqp://guest:guest@rabbitmq//'
