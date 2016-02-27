@@ -3,15 +3,14 @@ import random
 import re
 import shutil
 from datetime import datetime, timedelta
-from ffvideo import VideoStream, NoMoreData
+from ffvideo import VideoStream
 
+from django.conf import settings
 from django.db import models
 from django.db.models import Count
 from django.db.models.aggregates import Avg
-from django.utils import timezone
 from taggit.managers import TaggableManager
 from taggit.models import Tag
-from django.conf import settings
 
 
 class League(models.Model):
@@ -90,15 +89,19 @@ class League(models.Model):
         return sum(x.size for x in self.list_videos(videos_path))
 
     def round_information(self, league):
-        voting_round = int(
+        try:
+            voting_round = int(
                 LeagueVideo.objects.filter(league__name=league).aggregate(
-                        Avg('times_voted'))['times_voted__avg'])
-        total_videos = LeagueVideo.objects.filter(league__name=league).count()
-        videos_in_this_round = LeagueVideo.objects.filter(
+                    Avg('times_voted'))['times_voted__avg'])
+            total_videos = LeagueVideo.objects.filter(
+                league__name=league).count()
+            videos_in_this_round = LeagueVideo.objects.filter(
                 league__name=league, times_voted__gte=voting_round).count()
-        percent = 100 * videos_in_this_round / total_videos
+            percent = 100 * videos_in_this_round / total_videos
 
-        return percent, voting_round
+            return percent, voting_round
+        except Exception:
+            return (0, 0)
 
 
 class LeagueVideo(models.Model):
@@ -131,7 +134,8 @@ class LeagueVideo(models.Model):
     @property
     def duration(self):
         vs = VideoStream(self.video_full_path)
-        return (datetime(1,1,1,0,0,0) + timedelta(seconds=vs.duration)).time()
+        return (
+        datetime(1, 1, 1, 0, 0, 0) + timedelta(seconds=vs.duration)).time()
 
     @property
     def video_information(self):
