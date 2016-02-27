@@ -37,7 +37,7 @@ class RandomDirectoryCleanerView(TemplateView):
         elif delete:
             vid = LeagueVideo.objects.get(id=delete)
             vid.delete_video()
-        return HttpResponseRedirect(reverse('random-directory', (league,)))
+        return HttpResponseRedirect(reverse('random-directory', args=(league,)))
 
 
 class LeagueView(TemplateView):
@@ -78,7 +78,7 @@ class LeagueView(TemplateView):
             vid = LeagueVideo.objects.get(id=delete_id)
             vid.delete_video()
 
-        return HttpResponseRedirect(reverse('league', (league,)))
+        return HttpResponseRedirect(reverse('league', args=(league,)))
 
 
 class FilterGameView(TemplateView):
@@ -99,7 +99,7 @@ class RandomView(TemplateView):
     def post(self, request, *args, **kwargs):
         league = self.kwargs.pop('league')
         LeagueVideo.objects.get(id=request.POST.get('vote')).vote_up()
-        return HttpResponseRedirect(reverse('random-video', (league,)))
+        return HttpResponseRedirect(reverse('random-video', args=(league,)))
 
 
 
