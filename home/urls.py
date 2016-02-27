@@ -25,7 +25,7 @@ urlpatterns = patterns('',
     url(r'^accounts/', HomeView.as_view()),
     url(r'^admin/', include(admin.site.urls)),
 
-    url(r'^say/', SayView.as_view(), name='say'),
+    #url(r'^say/', SayView.as_view(), name='say'),
     url(r'^downloader/', login_required(
         SmartDownloaderView.as_view()), name='smart-downloader'),
     url(r'^random_directory/', login_required(

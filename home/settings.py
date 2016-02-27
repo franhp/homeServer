@@ -71,7 +71,7 @@ class Base(Configuration):
             'NAME': 'homeserver',
             'USER': os.environ.get('MYSQL_USER', 'root'),
             'PASSWORD': os.environ.get('MYSQL_PASSWORD', ''),
-            'HOST': 'mysql',
+            'HOST': 'localhost',
             'PORT': '3306',
         }
     }
