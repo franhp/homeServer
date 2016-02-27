@@ -183,7 +183,7 @@ class LeagueVideo(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk is None:
-            _, current_round = self.league.round_information()
+            _, current_round = self.league.round_information(self.league.name)
             self.times_voted = current_round
 
         if self.votes < -5:
