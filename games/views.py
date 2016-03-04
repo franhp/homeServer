@@ -163,6 +163,7 @@ class VideoSerializer(TaggitSerializer, serializers.ModelSerializer):
     league = serializers.CharField(source='league.name')
     tags = TagListSerializerField()
     popularity = serializers.IntegerField()
+    poster = serializers.CharField()
 
     class Meta:
         model = LeagueVideo
