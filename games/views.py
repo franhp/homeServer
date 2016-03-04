@@ -1,15 +1,16 @@
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import render
-from django.views.generic.base import TemplateView
-from rest_framework import serializers, viewsets
-from taggit.models import Tag
-
-from games.models import League, LeagueVideo
 from django.core.urlresolvers import reverse
 from django.http.response import HttpResponseRedirect
+from django.shortcuts import render
+from django.views.generic.base import TemplateView
 from rest_framework import filters
+from rest_framework import serializers, viewsets
+from taggit.models import Tag
 from taggit_serializer.serializers import (TagListSerializerField,
                                            TaggitSerializer)
+
+from games.models import League, LeagueVideo
+
 
 class RandomDirectoryCleanerView(TemplateView):
     template_name = 'random_directory_cleaner.html'
@@ -86,6 +87,7 @@ class FilterGameView(TemplateView):
     # TODO IDEA: Tag all the videos, how much time you got?
     # go random playlist!
 
+
 class RandomView(TemplateView):
     template_name = 'random_player.html'
 
@@ -100,7 +102,6 @@ class RandomView(TemplateView):
         league = self.kwargs.pop('league')
         LeagueVideo.objects.get(id=request.POST.get('vote')).vote_up()
         return HttpResponseRedirect(reverse('random-video', args=(league,)))
-
 
 
 class SearchAndTagView(TemplateView):
@@ -134,6 +135,7 @@ class ShowVideoView(TemplateView):
         vote_down = request.POST.get('vote_down')
         video_id = kwargs.pop('video_id')
         at_second = request.POST.get('at_second')
+        change_name = request.POST.get('change_name')
 
         vid = LeagueVideo.objects.get(id=video_id)
         if vote_up:
@@ -142,6 +144,8 @@ class ShowVideoView(TemplateView):
             vid.vote_down()
         elif at_second:
             vid.set_thumbnail_second(at_second)
+        elif change_name:
+            vid.change_name(change_name)
 
         return HttpResponseRedirect(reverse('show-video', args=(video_id,)))
 
@@ -164,6 +168,7 @@ class VideoSerializer(TaggitSerializer, serializers.ModelSerializer):
     tags = TagListSerializerField()
     popularity = serializers.IntegerField()
     poster = serializers.CharField()
+    video_rel_path = serializers.CharField()
 
     class Meta:
         model = LeagueVideo
@@ -172,8 +177,8 @@ class VideoSerializer(TaggitSerializer, serializers.ModelSerializer):
 class VideoView(viewsets.ModelViewSet):
     queryset = LeagueVideo.objects.all()
     serializer_class = VideoSerializer
-    filter_backends = (filters.SearchFilter, filters.OrderingFilter, )
-    search_fields = ('tags__slug', 'tags__name', )
+    filter_backends = (filters.SearchFilter, filters.OrderingFilter,)
+    search_fields = ('tags__slug', 'tags__name',)
     ordering_fields = '__all__'
     ordering = '-created_at'
 
@@ -194,5 +199,4 @@ class TagView(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('name', )
-
+    search_fields = ('name',)

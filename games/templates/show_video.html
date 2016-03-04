@@ -29,7 +29,8 @@
         <h3 {% include 'contestant.html' %}>
             {% include 'popularity.html' %}{{ video.popularity }}</span>
             <small>(
-            {{ video.votes }} votes
+            {% if video.votes >= 0 %}<i class="glyphicon glyphicon-triangle-top"></i>{% else %}<i class="glyphicon glyphicon-triangle-bottom"></i>{% endif %}
+            {{ video.votes }}
             <form action="{% url 'show-video' video.id %}" method="post" style="display: inline-block;">
                 {% csrf_token %}
                 <input type="hidden" name="vote_up" value="true">
@@ -40,7 +41,7 @@
                 <input type="hidden" name="vote_down" value="true">
                 <button class="btn btn-sm btn-danger"><i class="glyphicon glyphicon-chevron-down"></i></button>
             </form>
-            )</small> {{ video.name|truncatechars:55 }} </h3>
+            )</small> {{ video.name|slice:":50" }}<i id="rest-of-the-title" style="display: none;">{{ video.name|slice:"50:" }}</i><a id="rest-of-the-title-button" class="btn btn-xs" onclick="$('#rest-of-the-title').show();$('#rest-of-the-title-button').hide()"><i class="glyphicon glyphicon-plus-sign"></i></a> </h3>
 
         {% if not is_random %}
             <div class="col-md-8">
@@ -61,20 +62,38 @@
 
                 <hr />
 
-                <h4> Thumbnail second:</h4>
-                <form method="post" action="{% url 'show-video' video.id %}">
-                    {% csrf_token %}
-                    <div class="input-group">
-                        <input type="number" class="form-control" step="10" name="at_second" value="{{ video.thumbnail_second }}">
-                        <span class="input-group-btn">
-                            <input type="submit" class="btn btn-default">
-                        </span>
-                    </div>
-                </form>
+                {% include 'video_info.html' %}
 
                 <hr />
+                <button class="btn btn-primary" onclick="$('#edit-section').show();$(this).hide()">Edit</button>
+                <div id="edit-section" style="display: none;">
+                    <h4> Thumbnail second:</h4>
+                    <form method="post" action="{% url 'show-video' video.id %}">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="number" class="form-control" name="at_second" value="{{ video.thumbnail_second }}">
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-ok"></i></button>
+                            </span>
+                        </div>
+                    </form>
 
-                {% include 'video_info.html' %}
+                    <hr />
+
+                    <h4>Change name:</h4>
+                    <form method="post" action="{% url 'show-video' video.id %}">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="text" class="form-control" name="change_name" value="{{ video.video_full_path }}">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default"><i class="glyphicon glyphicon-ok"></i></button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+
+
+
 
             </div>
         {% else %}

@@ -73,17 +73,9 @@ class League(models.Model):
             for root, dirs, files in os.walk(video_location):
                 for name in files:
                     video_path = os.path.join(root, name)
-                    rel_path = os.path.join(
-
-                        os.path.relpath(root, self.library_path),
-                        name
-                    )
-                    if self.relative_prefix:
-                        rel_path = os.path.join(self.relative_prefix, rel_path)
                     if not is_commonly_not_used(name):
                         v, new = LeagueVideo.objects.get_or_create(
                             video_full_path=video_path,
-                            video_rel_path=rel_path,
                             league=self)
                         # if new:
                         #    v.auto_generate_tags()
@@ -114,7 +106,6 @@ class LeagueVideo(models.Model):
     votes = models.IntegerField(default=0)
     times_voted = models.IntegerField(default=0)
     video_full_path = models.CharField(max_length=255)
-    video_rel_path = models.CharField(max_length=255)
     league = models.ForeignKey(League, related_name='league')
     tags = TaggableManager()
     created_at = models.DateTimeField(auto_created=True, default=datetime.now)
@@ -136,6 +127,13 @@ class LeagueVideo(models.Model):
             video_count = LeagueVideo.objects.filter(tags=tag).count()
             score += video_count if tag not in popular else video_count / 3
         return score
+
+    @property
+    def video_rel_path(self):
+        return os.path.join(
+            self.league.relative_prefix or '',
+            os.path.relpath(self.video_full_path, self.league.library_path)
+        )
 
     @property
     def duration(self):
@@ -222,3 +220,8 @@ class LeagueVideo(models.Model):
         )
         shutil.move(self.video_full_path, dest_filename)
         self.delete()
+
+    def change_name(self, new_path):
+        shutil.move(self.video_full_path, new_path)
+        self.video_full_path = new_path
+        self.save()
