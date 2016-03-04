@@ -65,32 +65,30 @@
                 {% include 'video_info.html' %}
 
                 <hr />
-                <button class="btn btn-primary" onclick="$('#edit-section').show();$(this).hide()">Edit</button>
-                <div id="edit-section" style="display: none;">
-                    <h4> Thumbnail second:</h4>
-                    <form method="post" action="{% url 'show-video' video.id %}">
-                        {% csrf_token %}
-                        <div class="input-group">
-                            <input type="number" class="form-control" name="at_second" value="{{ video.thumbnail_second }}">
-                            <span class="input-group-btn">
-                                <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-ok"></i></button>
-                            </span>
-                        </div>
-                    </form>
 
-                    <hr />
+                <h4> Thumbnail second:</h4>
+                <form method="post" action="{% url 'show-video' video.id %}">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="number" class="form-control" name="at_second" value="{{ video.thumbnail_second }}">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-ok"></i></button>
+                        </span>
+                    </div>
+                </form>
 
-                    <h4>Change name:</h4>
-                    <form method="post" action="{% url 'show-video' video.id %}">
-                        {% csrf_token %}
-                        <div class="input-group">
-                            <input type="text" class="form-control" name="change_name" value="{{ video.video_full_path }}">
-                            <span class="input-group-btn">
-                                <button class="btn btn-default"><i class="glyphicon glyphicon-ok"></i></button>
-                            </span>
-                        </div>
-                    </form>
-                </div>
+                <hr />
+
+                <h4>Change name:</h4>
+                <form method="post" action="{% url 'show-video' video.id %}">
+                    {% csrf_token %}
+                    <div class="input-group">
+                        <input type="text" class="form-control" name="change_name" value="{{ video.video_full_path }}">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default"><i class="glyphicon glyphicon-ok"></i></button>
+                        </span>
+                    </div>
+                </form>
 
 
 
