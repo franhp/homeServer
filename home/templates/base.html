@@ -39,9 +39,9 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">leagues <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                         {% for league in leagues %}
-                            <li><a href="{% url 'random-directory' league.name %}" class="">{{ league.name }}'s random_directory</a></li>
+                            <li><a href="{% url 'random-directory' league.name %}" class="">{{ league.name }}'s random</a></li>
                             <li><a href="{% url 'league' league.name %}" class="">{{ league.name }}'s league</a></li>
-                            <li><a href="{% url 'random-video' league.name %}" class="">{{ league.name }}'s random</a></li>
+                            <li><a href="{% url 'random-video' league.name %}" class="">{{ league.name }}'s player</a></li>
                             <li><a href="{% url 'search-tag' league.name %}" class="">{{ league.name }}'s search_tag</a></li>
                             <li><a href="{% url 'ranking' league.name %}" class="">{{ league.name }}'s ranking</a></li>
                             {% if leagues.count > 1 %}<li role="separator" class="divider"></li>{% endif %}

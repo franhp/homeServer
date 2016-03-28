@@ -9,11 +9,13 @@
 {% block content %}
 
     {% if video %}
-        <h3>
-            {% include 'popularity.html' %}{{ video.popularity }}</span>
-            {{ video.name }}
-            <small>({{ video.duration|time:"H:i:s" }})</small>
-        </h3>
+        <div {% include 'contestant.html' %}>
+            <h3>
+                {% include 'popularity.html' %}{{ video.popularity }}</span>
+                {{ video.name }}
+                <small>({{ video.duration|time:"H:i:s" }})</small>
+            </h3>
+        </div>
 
 
         <div class="col-md-8">
@@ -23,12 +25,17 @@
             </video>
         </div>
         <div class="col-md-4">
-            <button class="btn btn-danger btn-lg" onclick="window.location.reload()"><span class="glyphicon glyphicon-chevron-right"></span></button>
+            <button class="btn btn-warning btn-lg" onclick="window.location.reload()"><span class="glyphicon glyphicon-hand-right"></span></button>
             <br /><br />
             <form action="{% url 'random-video' video.league %}" method="post">
                 {% csrf_token %}
-                <input type="hidden" name="vote" value="{{ video.id }}">
-                <button type="submit" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-heart"></span></button>
+                <input type="hidden" name="vote_up" value="{{ video.id }}">
+                <button type="submit" class="btn btn-success btn-lg"><span class="glyphicon glyphicon-thumbs-up"></span></button>
+            </form>
+            <form action="{% url 'random-video' video.league %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="vote_down" value="{{ video.id }}">
+                <button type="submit" class="btn btn-danger btn-lg"><span class="glyphicon glyphicon-thumbs-down"></span></button>
             </form>
             <hr>
             <ul id="tags">

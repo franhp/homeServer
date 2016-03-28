@@ -100,7 +100,14 @@ class RandomView(TemplateView):
 
     def post(self, request, *args, **kwargs):
         league = self.kwargs.pop('league')
-        LeagueVideo.objects.get(id=request.POST.get('vote')).vote_up()
+        vote_up = request.POST.get('vote_up')
+        vote_down = request.POST.get('vote_down')
+
+        if vote_up:
+            LeagueVideo.objects.get(id=vote_up).vote_up()
+        elif vote_down:
+            LeagueVideo.objects.get(id=vote_down).vote_down()
+
         return HttpResponseRedirect(reverse('random-video', args=(league,)))
 
 
