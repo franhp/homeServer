@@ -27,7 +27,7 @@
         </div>
         <hr />
         <h3 {% include 'contestant.html' %}>
-            {% include 'popularity.html' %}{{ video.popularity }}</span>
+            {% include 'popularity.html' %}{{ video.popularity }}<small>({{ video.votes }})</small></span>
             <small>(
             {% if video.votes >= 0 %}<i class="glyphicon glyphicon-triangle-top"></i>{% else %}<i class="glyphicon glyphicon-triangle-bottom"></i>{% endif %}
             {{ video.votes }}
