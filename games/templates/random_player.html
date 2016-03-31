@@ -11,7 +11,7 @@
     {% if video %}
         <div {% include 'contestant.html' %}>
             <h3>
-                {% include 'popularity.html' %}{{ video.popularity }}</span>
+                {% include 'popularity.html' %}{{ video.popularity }}<small>({{ video.votes }})</small></span>
                 {{ video.name }}
                 <small>({{ video.duration|time:"H:i:s" }})</small>
             </h3>

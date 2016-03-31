@@ -1,12 +1,12 @@
-{% if video.popularity >= 200 %}
+{% if video.popularity >= 500 %}
     <span class="badge" style="font-size: xx-large; background-color: darkred;">
-{% elif video.popularity >= 150 and video.popularity < 200  %}
+{% elif video.popularity >= 400 and video.popularity < 500  %}
     <span class="badge" style="font-size: x-large; background-color: red;">
-{% elif video.popularity >= 100 and video.popularity < 150  %}
+{% elif video.popularity >= 300 and video.popularity < 400  %}
     <span class="badge" style="font-size: large; background-color: orangered;">
-{% elif video.popularity >= 50 and video.popularity < 100  %}
+{% elif video.popularity >= 200 and video.popularity < 300  %}
     <span class="badge" style="font-size: small; background-color: darkorange;">
-{% elif video.popularity > 15 and video.popularity < 50  %}
+{% elif video.popularity > 100 and video.popularity < 200  %}
     <span class="badge" style="font-size: x-small; background-color: orange;">
 {% else %}
     <span class="badge" style="font-size: xx-small">
